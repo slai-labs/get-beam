@@ -9,7 +9,7 @@ curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL
 
 # Getting Started
 
-1. [Create a Slai account](https://slai.io) and grab your API keys from the [settings page](https://slai.io/settings/api-keys)
+1. [Create a Slai account](https://slai.io) and grab your API keys from the [settings page](https://www.slai.io/settings/api-keys)
 2. Configure your credentials (you'll be prompted to enter your API keys)
 
 ```bash
