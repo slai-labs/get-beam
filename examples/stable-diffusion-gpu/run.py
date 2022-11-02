@@ -1,8 +1,11 @@
 import os
+from dotenv import load_dotenv
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 from PIL import Image
+
+load_dotenv()
 
 
 def generate_image(**inputs):
@@ -10,8 +13,7 @@ def generate_image(**inputs):
         "CompVis/stable-diffusion-v1-4",
         torch_dtype=torch.float16,
         revision="fp16",
-        # Add your personal auth token from Huggingface
-        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
+        use_auth_token=os.getenv("HUGGING_FACE_TOKEN"),
     ).to("cuda")
 
     prompt = inputs["prompt"]
@@ -20,4 +22,9 @@ def generate_image(**inputs):
         image = pipe(prompt, guidance_scale=7.5).images[0]
         print(image)
 
-    image.save("output.png")
+        image.save("output.png")
+
+
+if __name__ == "__main__":
+    prompt = "a renaissance style portrait of steve jobs"
+    generate_image(prompt=prompt)

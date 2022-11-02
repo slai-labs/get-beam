@@ -1,2 +1,5 @@
 __pycache__
+__downloads__
+.env
 .venv
+.DS_STORE
