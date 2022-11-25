@@ -8,10 +8,10 @@ Beam is a cloud platform where you can provision infrastructure, develop on remo
 
 <p align="center">
 <a href="https://join.slack.com/share/enQtNDMwOTExNDI3NTE0MS1hZTlhNWJlMmJjZmExY2MzZGZhMTg4MWJhNzEwZTc5YTQwMjM1MDY5NDY1NThlYjA0NzM1NTQzYzI3MjgzZjQx"><img src="https://img.shields.io/badge/join-Slack-yellow"/></a>
-<a href="https://docs.slai.io/beam"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
+<a href="https://docs.getbeam.dev"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
 
 
-# Features 
+# Features
 
 ### 📦 Setup remote development environments in code
 
@@ -39,7 +39,7 @@ curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL
 
 # Getting Started
 
-1. [Create a Slai account](https://slai.io) and grab your API keys from the [settings page](https://www.slai.io/beam/apps/settings/api-keys)
+1. [Create an account on Beam](https://getbeam.dev) and grab your API keys from the [settings page](https://www.getbeam.dev/apps/settings/api-keys)
 2. Configure your credentials (you'll be prompted to enter your API keys)
 
 ```bash
@@ -80,5 +80,4 @@ beam deploy <myapp.py>
 
 # Documentation
 
-[Check out our complete documentation here »](https://docs.slai.io/beam)
-
+[Check out our complete documentation here »](https://docs.getbeam.dev)
