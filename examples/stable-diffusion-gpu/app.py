@@ -6,7 +6,7 @@ app = beam.App(
     gpu=1,
     memory="16Gi",
     python_version="python3.8",
-    python_packages=["diffusers", "transformers", "torch", "pillow", "python-dotenv"],
+    python_packages=["diffusers", "transformers", "torch", "pillow"],
 )
 
 app.Trigger.Webhook(
@@ -14,3 +14,5 @@ app.Trigger.Webhook(
 )
 
 app.Output.File(path="output.png", name="my_image")
+
+app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")

@@ -1,11 +1,11 @@
 import os
-from dotenv import load_dotenv
+
+os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 from PIL import Image
-
-load_dotenv()
 
 
 def generate_image(**inputs):
@@ -13,15 +13,13 @@ def generate_image(**inputs):
         "CompVis/stable-diffusion-v1-4",
         torch_dtype=torch.float16,
         revision="fp16",
-        use_auth_token=os.getenv("HUGGING_FACE_TOKEN"),
+        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     ).to("cuda")
 
     prompt = inputs["prompt"]
 
     with autocast("cuda"):
         image = pipe(prompt, guidance_scale=7.5).images[0]
-        print(image)
-
         image.save("output.png")
 
 
