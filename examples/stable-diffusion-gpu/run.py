@@ -1,6 +1,7 @@
 import os
 
-os.environ["TRANSFORMERS_CACHE"] = "./cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
+os.environ["HF_HOME"] = "/workspace/cached_models"
 
 import torch
 from torch import autocast
