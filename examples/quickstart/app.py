@@ -9,9 +9,9 @@ app = beam.App(
 )
 
 app.Trigger.RestAPI(
-    inputs={"text": beam.types.StringType()},
+    inputs={"text": beam.Types.StringType()},
     outputs={
-        "response": beam.types.StringType(),
+        "response": beam.Types.StringType(),
     },
     handler="run.py:hello_world",
 )
