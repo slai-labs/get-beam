@@ -30,7 +30,8 @@ def process_images():
     client = Boto3Client()
     # Download S3 files to a Beam Persistent Volume
     client.download_from_s3(
-        bucket_name="slai-example-images", download_path="./unprocessed_images"
+        bucket_name=os.environ["UNPROCESSED_IMAGES_BUCKET"],
+        download_path="./unprocessed_images",
     )
 
     for f in os.listdir("./unprocessed_images"):
@@ -45,7 +46,7 @@ def process_images():
 
             # Write back to S3 bucket
             client.upload_to_s3(
-                bucket_name="slai-processed-images",
+                bucket_name=os.environ["PROCESSED_IMAGES_BUCKET"],
                 file_body=img_in_bytes.getvalue(),
                 key=f"{name}.png",
             )
