@@ -2,7 +2,7 @@ import beam
 
 # The environment your code will run on
 app = beam.App(
-    name="stable-diffusion-loader-test-3",
+    name="stable-diffusion-app",
     cpu=8,
     memory="32Gi",
     gpu=1,
