@@ -1,7 +1,7 @@
 import os
 
-os.environ["TRANSFORMERS_CACHE"] = "/workspace/cached_models"
-os.environ["HF_HOME"] = "/workspace/cached_models"
+os.environ["TRANSFORMERS_CACHE"] = "/volumes/cached_models"
+os.environ["HF_HOME"] = "/volumes/cached_models"
 
 import torch
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
