@@ -5,7 +5,6 @@ app = beam.App(
     cpu=4,
     memory="4Gi",
     gpu=0,
-    apt_install=["ffmpeg"],
     python_version="python3.9",
     python_packages=["transformers", "torch"],
 )

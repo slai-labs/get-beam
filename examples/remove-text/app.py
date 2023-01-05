@@ -13,7 +13,6 @@ app = beam.App(
     name="rmtext",
     cpu=4,
     memory="16Gi",
-    apt_install=["libgl-dev"],
     python_packages=[
         "numpy",
         "matplotlib",
