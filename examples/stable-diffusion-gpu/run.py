@@ -3,7 +3,7 @@ import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from PIL import Image
 
-cache_path = "/workspace/cached_models/"
+cache_path = "/volumes/cached_models/"
 model_id = "runwayml/stable-diffusion-v1-5"
 
 
