@@ -9,11 +9,6 @@ app = beam.App(
     python_packages=["transformers", "torch"],
 )
 
-# app.Trigger.Schedule(
-#     when="every 10s",
-#     handler="run.py:predict_sentiment",
-# )
-
 app.Trigger.RestAPI(
     inputs={"text": beam.Types.String()},
     outputs={"prediction": beam.Types.String()},
