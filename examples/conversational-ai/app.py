@@ -1,3 +1,11 @@
+"""
+This example is a conversational AI app, using LangChain.
+
+Users can ask queries about the day's New York Times headlines, and the conversational AI will answer questions about them.
+
+It's inspired by this post:
+https://langchain.readthedocs.io/en/latest/modules/chains/combine_docs_examples/question_answering.html
+"""
 import beam
 
 app = beam.App(
