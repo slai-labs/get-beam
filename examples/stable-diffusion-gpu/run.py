@@ -35,11 +35,14 @@ def generate_image(**inputs):
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     ).to("cuda")
 
-    pipe.enable_xformers_memory_efficient_attention()
-
     with torch.inference_mode():
         with torch.autocast("cuda"):
-            image = pipe(prompt, num_inference_steps=15, guidance_scale=7.0).images[0]
+            image = pipe(prompt, num_inference_steps=20, guidance_scale=7.5).images[0]
 
     print(f" Saved Image: {image}")
     image.save("output.png")
+
+
+if __name__ == "__main__":
+    prompt = "a renaissaince style photo of elon musk"
+    generate_image(prompt=prompt)

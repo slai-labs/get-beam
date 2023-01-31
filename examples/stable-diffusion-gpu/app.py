@@ -12,9 +12,7 @@ app = beam.App(
         "transformers",
         "torch",
         "pillow",
-        "triton",
         "accelerate",
-        "xformers==0.0.16rc393",
         "safetensors",
     ],
 )
