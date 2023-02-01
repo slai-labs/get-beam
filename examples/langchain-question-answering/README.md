@@ -1,12 +1,12 @@
 ## LangChain - Beam Template
 
-This repo is a template showing how to deploy LangChain apps on [Beam](https://beam.cloud).
+This template demonstrates how to deploy LangChain apps using [Beam](https://beam.cloud).
 
-This example implements a basic version of the Question Answering guide. [A more complete code walk-through can be found here](https://docs.beam.cloud/getting-started/langchain).
+This example implements a basic version of the [Question Answering guide](https://langchain.readthedocs.io/en/latest/modules/chains/combine_docs_examples/question_answering.html). [A more complete code walk-through can be found here](https://docs.beam.cloud/getting-started/langchain).
 
 ## Deploying on Beam
 
-You can easily deploy your LangChain apps as a web endpoint.
+You can easily deploy your LangChain apps as web endpoints:
 
 1. Create an account on [Beam](https://beam.cloud)
 2. Download the CLI and Python-SDK. [Instructions here](https://docs.beam.cloud/getting-started/quickstart).
