@@ -23,10 +23,7 @@ torch.backends.cudnn.enabled = True
 torch.backends.cudnn.benchmark = False
 
 device = "cuda"
-url = "https://github.com/BogiHsu/Tacotron2-PyTorch/releases/download/lj-200k-b512/ckpt_200000"
 dst_dir = '/volumes/vol/'
-target_filename = 'tacotron.ckpt'
-target_path = os.path.join(dst_dir, target_filename)
 torch.hub.set_dir(dst_dir)
 
 tacotron2 = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_tacotron2', model_math='fp16')
