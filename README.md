@@ -7,8 +7,8 @@ Beam is a cloud platform where you can provision infrastructure, develop on remo
 </h4>
 
 <p align="center">
-<a href="https://join.slack.com/share/enQtNDMwOTExNDI3NTE0MS1hZTlhNWJlMmJjZmExY2MzZGZhMTg4MWJhNzEwZTc5YTQwMjM1MDY5NDY1NThlYjA0NzM1NTQzYzI3MjgzZjQx"><img src="https://img.shields.io/badge/join-Slack-yellow"/></a>
-<a href="https://docs.getbeam.dev"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
+<a href="https://beam-89x5025.slack.com/join/shared_invite/zt-1jf3z8c01-ZXF6pPSCYdosaJ74__jaGw#/shared-invite/email"><img src="https://img.shields.io/badge/join-Slack-yellow"/></a>
+<a href="https://docs.beam.cloud"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
 
 
 # Features
@@ -39,7 +39,7 @@ curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL
 
 # Getting Started
 
-1. [Create an account on Beam](https://getbeam.dev) and grab your API keys from the [settings page](https://www.getbeam.dev/apps/settings/api-keys)
+1. [Create an account on Beam](https://beam.cloud) and grab your API keys from the [settings page](https://www.beam.cloud/dashboard/settings/api-keys)
 2. Configure your credentials (you'll be prompted to enter your API keys)
 
 ```bash
@@ -80,4 +80,4 @@ beam deploy <myapp.py>
 
 # Documentation
 
-[Check out our complete documentation here »](https://docs.getbeam.dev)
+[Check out our complete documentation here »](https://docs.beam.cloud)
