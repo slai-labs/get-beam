@@ -15,7 +15,6 @@ This is the runtime our code will run in. You can add a GPU if you like, but it'
 app = beam.App(
     name="movie-recommendation-example",
     cpu=4,
-    # gpu=1
     memory="8Gi",
     python_version="python3.8",
     python_packages=["numpy", "torch", "pandas", "matplotlib"],

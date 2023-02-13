@@ -4,7 +4,6 @@ app = beam.App(
     name="sentiment-analysis",
     cpu=4,
     memory="4Gi",
-    gpu=0,
     python_version="python3.9",
     python_packages=["transformers", "torch"],
 )

@@ -9,7 +9,7 @@ app = beam.App(
     name="pointe",
     cpu=4,
     memory="8Gi",
-    gpu=1,
+    gpu="A10G",
     python_packages=[
         "filelock",
         "Pillow",

@@ -8,10 +8,21 @@ app = beam.App(
     name="tacotron2",
     cpu=8,
     memory="16Gi",
-    gpu=1,
-    apt_install=[],
+    gpu="A10G",
     python_version=beam.types.PythonVersion.Python310,
-    python_packages=["numpy", "scipy", "pillow", "inflect", "librosa", "Unidecode", "torch", "inflect", "tqdm", "torchaudio", "speechbrain"],
+    python_packages=[
+        "numpy",
+        "scipy",
+        "pillow",
+        "inflect",
+        "librosa",
+        "Unidecode",
+        "torch",
+        "inflect",
+        "tqdm",
+        "torchaudio",
+        "speechbrain",
+    ],
 )
 
 app.Trigger.RestAPI(

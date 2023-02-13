@@ -11,7 +11,7 @@ import beam
 app = beam.App(
     name="conversational-ai",
     cpu=8,
-    gpu=1,
+    gpu="A10G",
     memory="32Gi",
     python_packages=["bs4", "openai", "langchain", "faiss-cpu"],
 )
