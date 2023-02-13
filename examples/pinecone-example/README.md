@@ -28,7 +28,7 @@ app = beam.App(
 )
 ```
 
-In your shell, run `beam start app.py`. This will create a GPU environment, and connect it to your shell -- any code you run in your shell will be run remotely on the server Beam created for you!
+In your shell, run `beam start app.py`. This will create a GPU environment, and connect it to your shell -- any code you run in your shell will be run in a remote container Beam created for you!
 
 ## Create a Pinecone Index
 
