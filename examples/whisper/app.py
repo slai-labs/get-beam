@@ -7,9 +7,8 @@ import beam
 app = beam.App(
     name="whisper-example",
     cpu=8,
-    memory="4Gi",
-    gpu=0,
-    apt_install=[],
+    memory="32Gi",
+    gpu="A10G",
     python_version=beam.types.PythonVersion.Python38,
     python_packages=["git+https://github.com/openai/whisper.git", "youtube_dl"],
 )
