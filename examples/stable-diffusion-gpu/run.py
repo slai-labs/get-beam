@@ -44,5 +44,5 @@ def generate_image(**inputs):
 
 
 if __name__ == "__main__":
-    prompt = "a renaissaince style photo of elon musk"
+    prompt = "a renaissance style photo of elon musk"
     generate_image(prompt=prompt)
