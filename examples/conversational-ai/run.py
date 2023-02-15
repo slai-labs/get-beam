@@ -1,30 +1,30 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
-from langchain.docstore.document import Document
-from langchain.prompts import PromptTemplate
 
 from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 
+# Add your OpenAI API Key to the Beam Secrets Manager:
+# beam.cloud/dashboard/settings/secrets
+openai_api_key = os.environ["OPENAI_API_KEY"]
+
 # We'll save our headlines to this path
 file_path = "/workspace/transcript.txt"
-
 
 # Download headlines from NYT
 def download_headlines():
     res = requests.get("https://www.nytimes.com")
     soup = BeautifulSoup(res.content, "html.parser")
     # Grab all headlines
-    headlines = soup.find_all("h3", class_="indicate-hover", text=True)
+    headlines = soup.find_all("h3", class_="indicate-hover", string=True)
     parsed_headlines = []
     for h in headlines:
         parsed_headlines.append(h.get_text())
-
-    print(parsed_headlines)
 
     # Write headlines to a text file
     with open(file_path, "w") as f:
@@ -54,7 +54,9 @@ def start_conversation(**inputs):
         docsearch = FAISS.from_texts(texts, embeddings)
         docs = docsearch.similarity_search(query)
 
-        chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
+        chain = load_qa_chain(
+            OpenAI(openai_api_key=openai_api_key, temperature=0), chain_type="stuff"
+        )
         res = chain(
             {"input_documents": docs, "question": query}, return_only_outputs=True
         )
