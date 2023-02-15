@@ -6,7 +6,7 @@ import beam
 app = beam.App(
     name="pinecone-example",
     cpu=8,
-    gpu=1,
+    gpu="A10G",
     memory="32Gi",
     python_packages=[
         "pinecone-client",
@@ -19,8 +19,9 @@ app = beam.App(
 # Add a REST API Trigger to deploy this app as a web endpoint
 app.Trigger.RestAPI(
     inputs={
+        # Takes a question as input -- this is passed as a keyword argument to the handler function
         "question": beam.Types.String()
-    },  # Takes a question as input -- this is passed as a keyword argument to the handler function
+    },
     outputs={
         "answer": beam.Types.String(),
         "context": beam.Types.String(),

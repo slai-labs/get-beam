@@ -134,3 +134,4 @@ if __name__ == "__main__":
     # Initialize Pinecone
     # initialize_retriever()
     question = "What are the first names of the men that invented youtube?"
+    answer_question(question=question)
