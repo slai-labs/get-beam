@@ -17,7 +17,7 @@ import beam
 app = beam.App(
     name="pinecone-example",
     cpu=8,
-    gpu=1,
+    gpu="A10G",
     memory="32Gi",
     python_packages=[
         "pinecone-client",
@@ -36,7 +36,7 @@ We'll initialize Pinecone and create an index if it doesn't already exist:
 
 ```python
 def get_or_create_index():
-    # Add your Pinecone credentials to the Beam Secrets Manager
+    # Add your Pinecone credentials to the Beam Secrets Manager: beam.cloud/dashboard/settings/secrets
     # If you don't have a Pinecone account, you can create one here: app.pinecone.io
     pinecone.init(
         api_key=os.environ["PINECONE_API_KEY"],
