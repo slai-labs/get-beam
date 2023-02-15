@@ -6,7 +6,7 @@ In this example, we'll setup an app with Pinecone for extractive question answer
 
 This example is based heavily on the [Extractive Question Answering example](https://docs.pinecone.io/docs/extractive-question-answering).
 
-This example requires a free acccount on [Beam](https://beam.cloud), and the Beam CLI and Python SDK installed.
+This example requires free accounts on [Beam](https://beam.cloud), [Pinecone](https://pinecone.io), and [Huggingface](https://huggingface.co), as well as the [Beam CLI](https://docs.beam.cloud/reference/cli) and [Python SDK](https://docs.beam.cloud/reference/sdk) installed.
 
 ## Setup a Beam GPU Environment 
 
@@ -17,7 +17,7 @@ import beam
 app = beam.App(
     name="pinecone-example",
     cpu=8,
-    gpu=1,
+    gpu="A10G",
     memory="32Gi",
     python_packages=[
         "pinecone-client",
@@ -36,7 +36,7 @@ We'll initialize Pinecone and create an index if it doesn't already exist:
 
 ```python
 def get_or_create_index():
-    # Add your Pinecone credentials to the Beam Secrets Manager
+    # Add your Pinecone credentials to the Beam Secrets Manager: beam.cloud/dashboard/settings/secrets
     # If you don't have a Pinecone account, you can create one here: app.pinecone.io
     pinecone.init(
         api_key=os.environ["PINECONE_API_KEY"],
@@ -207,7 +207,7 @@ beam deploy app.py
 
 You'll see an API printed out in the shell:
 
-![](/pinecone-example/call-api.png)
+![](./call-api.png)
 
 ## Example Request
 
@@ -224,6 +224,6 @@ You'll see an API printed out in the shell:
 { "answer": "Luigi Pieragostini. A second New Haven gastronomical claim to fame is Louis' Lunch, which is located in a small brick building on Crown Street and has been serving fast food since 1895. Though fiercely debated, the restaurant's founder Louis Lassen is credited by the Library of Congress with inventing the hamburger and steak sandwich. Louis' Lunch broils hamburgers, steak sandwiches and hot dogs vertically in original antique 1898 cast iron stoves using gridirons, patented by local resident Luigi Pieragostini in 1939, that hold the meat in place while it cooks." }
 ```
 
-## Example Application
+## Next Steps
 
-You can find the source code for this example here. Just clone the repo, cd into the directory, and run `beam start app.py`, and you can develop in your own GPU environment, and deploy it as a REST API.
+It's easy to run this example yourself. Just clone the repo, `cd` into the directory, and run `beam start app.py`. You can customize this example in your very own GPU environment and deploy it as a REST API when you're ready to hit prod.
