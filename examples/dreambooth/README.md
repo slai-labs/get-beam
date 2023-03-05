@@ -37,7 +37,7 @@ app.Trigger.Webhook(
 # File path where we'll save the generated images
 app.Output.File(path="output.png", name="image-output")
 
-# Persistent volume to store cached model
+# Shared volume to store trained models
 app.Mount.SharedVolume(path="./dreambooth", name="dreambooth")
 ```
 
