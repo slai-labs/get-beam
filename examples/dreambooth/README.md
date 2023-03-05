@@ -6,11 +6,6 @@ This app has two components: an app for training, and an app for inference.
 
 This endpoint will take a list of input images as URLs, and fine-tune Stable Diffusion on those images. It also takes a user ID, so that you can reference the specific fine-tuned model later on when you generate customized images.
 
-Here's what this code does:
-
-1. Call API with input images
-2. Handler takes images and runs `python run_training.py`, which starts training
-
 ```python
 import beam
 
@@ -24,7 +19,7 @@ app = beam.App(
     python_packages="requirements.txt",
 )
 
-# Webhook API will take two inputs:
+# Webhook API will take the following inputs:
 # - user_id, to identify the user training their custom model
 # - image_urls, a list of image URLs
 # - class prompt, which is the **general** category of the thing being trained on (e.g. a person)
@@ -38,7 +33,6 @@ app.Trigger.Webhook(
     },
     handler="run_training.py:train_dreambooth",
 )
-
 
 # File path where we'll save the generated images
 app.Output.File(path="output.png", name="image-output")
