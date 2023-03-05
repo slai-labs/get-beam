@@ -4,26 +4,27 @@ import subprocess
 import hashlib
 import os
 
-BASE_ROUTE = "/volumes/dreambooth"
-pretrained_model_name_or_path = "CompVis/stable-diffusion-v1-4"
-
 """
 This function:
 - takes a list of image URLs
-- saves them to a Persistent Volume, 
+- saves them to a Persistent Volume
 - trains Dreambooth on the images
 - saves them in a dedicated partition based on their user ID
 """
+
+BASE_ROUTE = "./dreambooth"
+pretrained_model_name_or_path = "runwayml/stable-diffusion-v1-5"
 
 
 def train_dreambooth(**inputs):
 
     user_id = inputs["user_id"]
     urls = inputs["image_urls"]
+    instance_prompt = inputs["instance_prompt"]
+    class_prompt = inputs["class_prompt"]
 
-    # Create directories in persistent volume
+    # Create directories in Persistent Volume
     pathlib.Path(BASE_ROUTE).mkdir(parents=True, exist_ok=True)
-    pathlib.Path(f"{BASE_ROUTE}/images").mkdir(parents=True, exist_ok=True)
     pathlib.Path(f"{BASE_ROUTE}/images/{user_id}").mkdir(parents=True, exist_ok=True)
 
     training_images_path = f"{BASE_ROUTE}/images/{user_id}"
@@ -41,6 +42,7 @@ def train_dreambooth(**inputs):
         else:
             print(f"Failed to save image from URL: {url}")
 
+    # Dreambooth commands
     subprocess.run(
         [
             "python3.8",
@@ -56,17 +58,22 @@ def train_dreambooth(**inputs):
             # Save trained model in the persistent volume, based on the user UUID
             f"--output_dir={BASE_ROUTE}/trained_models/{user_id}",
             "--prior_loss_weight=1.0",
-            "--instance_prompt=man wearing sunglasses",
+            # Instance Prompt -- the specific instance of the image being fine-tuned, e.g. a [sks] man wearing sunglasses
+            f"--instance_prompt={instance_prompt}",
+            # Class Prompt -- the general category of the image being fine-tuned e.g. a man wearing sunglasses
+            f"--class_prompt={class_prompt}",
+            "--mixed_precision=no",
             "--resolution=512",
             "--train_batch_size=1",
             "--gradient_accumulation_steps=1",
             "--use_8bit_adam",
             "--gradient_checkpointing",
-            "--enable_xformers_memory_efficient_attention",
             "--set_grads_to_none",
-            "--learning_rate=2e-6",
             "--lr_scheduler=constant",
             "--lr_warmup_steps=0",
+            # The two most useful levers in the training process
+            # If the generated images don't match your prompt, you should consider increasing or decreasing the training steps and learning rate
+            "--learning_rate=2e-6",
             "--max_train_steps=400",
         ],
         stdin=subprocess.PIPE,
@@ -76,6 +83,18 @@ def train_dreambooth(**inputs):
 
 
 if __name__ == "__main__":
-    user_id = "12345"
-    urls = ["https://slai-demo-datasets.s3.amazonaws.com/git-header.png"]
-    train_dreambooth(user_id=user_id, image_urls=urls)
+    user_id = "111111"
+    instance_prompt = "a photo of a sks toy"
+    class_prompt = "a photo of a toy"
+    urls = [
+        "https://huggingface.co/datasets/valhalla/images/resolve/main/2.jpeg",
+        "https://huggingface.co/datasets/valhalla/images/resolve/main/3.jpeg",
+        "https://huggingface.co/datasets/valhalla/images/resolve/main/5.jpeg",
+        "https://huggingface.co/datasets/valhalla/images/resolve/main/6.jpeg",
+    ]
+    train_dreambooth(
+        user_id=user_id,
+        image_urls=urls,
+        instance_prompt=instance_prompt,
+        class_prompt=class_prompt,
+    )

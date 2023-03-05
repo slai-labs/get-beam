@@ -1,8 +1,8 @@
 compute_environment: LOCAL_MACHINE
 deepspeed_config: {}
-distributed_type: 'NO'
-downcast_bf16: 'no'
-dynamo_backend: 'NO'
+distributed_type: "NO"
+downcast_bf16: "no"
+dynamo_backend: "NO"
 fsdp_config: {}
 gpu_ids: all
 machine_rank: 0
