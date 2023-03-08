@@ -1,0 +1,5 @@
+torch
+# tensorflow
+pandas
+numpy
+matplotlib
