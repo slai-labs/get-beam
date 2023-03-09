@@ -3,7 +3,7 @@ import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from PIL import Image
 
-cache_path = "/volumes/cached_models/"
+cache_path = "./cached_models/"
 model_id = "runwayml/stable-diffusion-v1-5"
 
 
@@ -31,7 +31,7 @@ def generate_image(**inputs):
         torch_dtype=torch.float16,
         cache_dir=cache_path,
         scheduler=scheduler,
-        # Add your own access token from Huggingface
+        # Add your own auth token from Huggingface
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     ).to("cuda")
 
@@ -39,7 +39,7 @@ def generate_image(**inputs):
         with torch.autocast("cuda"):
             image = pipe(prompt, num_inference_steps=20, guidance_scale=7.5).images[0]
 
-    print(f" Saved Image: {image}")
+    print(f"Saved Image: {image}")
     image.save("output.png")
 
 

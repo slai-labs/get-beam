@@ -27,4 +27,4 @@ app.Trigger.Webhook(
 app.Output.File(path="output.png", name="myimage")
 
 # Persistent volume to store cached model
-app.Mount.PersistentVolume(app_path="./cached_models", name="cached_model")
+app.Mount.PersistentVolume(path="./cached_models", name="cached_model")
