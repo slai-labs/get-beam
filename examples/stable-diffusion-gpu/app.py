@@ -14,6 +14,7 @@ app = beam.App(
         "pillow",
         "accelerate",
         "safetensors",
+        "xformers",
     ],
 )
 
@@ -27,4 +28,4 @@ app.Trigger.Webhook(
 app.Output.File(path="output.png", name="myimage")
 
 # Persistent volume to store cached model
-app.Mount.PersistentVolume(path="./cached_models", name="cached_model")
+app.Mount.PersistentVolume(path="./models", name="models")
