@@ -13,7 +13,7 @@ app = beam.App(
     cpu=8,
     gpu="A10G",
     memory="32Gi",
-    python_packages=["bs4", "openai", "langchain", "faiss-cpu"],
+    python_packages=["langchain==0.0.112", "openai", "faiss-cpu", "promptlayer", "bs4"],
 )
 
 # Triggers determine how your app is deployed

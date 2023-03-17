@@ -1,5 +1,6 @@
 import os
 import requests
+from pathlib import Path
 from bs4 import BeautifulSoup
 
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -7,14 +8,15 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
 
 from langchain.chains.question_answering import load_qa_chain
-from langchain.llms import OpenAI
+from langchain.llms import PromptLayerOpenAIChat
+
 
 # Add your OpenAI API Key to the Beam Secrets Manager:
 # beam.cloud/dashboard/settings/secrets
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
 # We'll save our headlines to this path
-file_path = "/workspace/transcript.txt"
+file_path = Path("/workspace/transcript.txt")
 
 # Download headlines from NYT
 def download_headlines():
@@ -36,8 +38,10 @@ def download_headlines():
 def start_conversation(**inputs):
     # Grab the input from the API
     query = inputs["query"]
-    # Download headlines from nytimes.com and save to the file path above
-    download_headlines()
+
+    if not file_path.exists():
+        # Download headlines from nytimes.com and save to the file path above
+        download_headlines()
 
     with open(file_path) as f:
         saved_file = f.read()
@@ -55,7 +59,8 @@ def start_conversation(**inputs):
         docs = docsearch.similarity_search(query)
 
         chain = load_qa_chain(
-            OpenAI(openai_api_key=openai_api_key, temperature=0), chain_type="stuff"
+            PromptLayerOpenAIChat(openai_api_key=openai_api_key, pl_tags=["langchain"]),
+            chain_type="stuff",
         )
         res = chain(
             {"input_documents": docs, "question": query}, return_only_outputs=True
@@ -65,7 +70,6 @@ def start_conversation(**inputs):
 
 
 if __name__ == "__main__":
-    # # You can customize this query however you want:
-    # # For example: What happened in Washington today?
-    query = "Give me a summary of today's news"
+    # You can customize this query however you want:
+    query = "What happened in sports?"
     start_conversation(query=query)
