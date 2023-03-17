@@ -4,6 +4,8 @@ This template demonstrates how to deploy LangChain apps using [Beam](https://bea
 
 This example implements a basic version of the [Question Answering guide](https://langchain.readthedocs.io/en/latest/modules/chains/combine_docs_examples/question_answering.html). [A more complete code walk-through can be found here](https://docs.beam.cloud/getting-started/langchain).
 
+Note: You'll need accounts on [OpenAI](https://openai.com) and [PromptLayer](https://promptlayer.com) to run this example.
+
 ## Deploying on Beam
 
 You can easily deploy your LangChain apps as web endpoints:
@@ -11,7 +13,8 @@ You can easily deploy your LangChain apps as web endpoints:
 1. Create an account on [Beam](https://beam.cloud)
 2. Download the CLI and Python-SDK. [Instructions here](https://docs.beam.cloud/getting-started/quickstart).
 3. Add your `OPENAI_API_KEY` to the [Beam Secrets Manager](https://www.beam.cloud/dashboard/settings/secrets)
-4. Download this template, and run `beam deploy app.py` from the working directory.
+4. Add your `PROMPTLAYER_API_KEY` to the [Beam Secrets Manager](https://www.beam.cloud/dashboard/settings/secrets)
+5. Download this template, and run `beam deploy app.py` from the working directory.
 
 ## Example Request
 
