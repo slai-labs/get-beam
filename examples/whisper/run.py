@@ -1,29 +1,28 @@
+import os
 import whisper
-import youtube_dl
+from pytube import YouTube
 
 
 def transcribe(**inputs):
     # Grab the video URL passed from the API
     video_url = inputs["video_url"]
 
-    # Save the downloaded video to the Output defined in app.py
-    download_path = "/workspace/video.mp3"
-    options = {
-        "format": "bestaudio/best",
-        "keepvideo": False,
-        "outtmpl": download_path,
-    }
+    # Create YouTube object
+    yt = YouTube(video_url)
+    video = yt.streams.filter(only_audio=True).first()
 
-    # Download video to the download path defined above
-    video_info = youtube_dl.YoutubeDL().extract_info(url=video_url, download=True)
-    with youtube_dl.YoutubeDL(options) as ydl:
-        ydl.download([video_info["webpage_url"]])
+    # Download audio to the output path
+    out_file = video.download(output_path="./")
+    base, ext = os.path.splitext(out_file)
+    new_file = base + ".mp3"
+    os.rename(out_file, new_file)
+    a = new_file
 
     # Load Whisper and transcribe audio
     model = whisper.load_model("small")
-    result = model.transcribe(download_path)
-    print(result["text"])
+    result = model.transcribe(a)
 
+    print(result["text"])
     return {"pred": result["text"]}
 
 
