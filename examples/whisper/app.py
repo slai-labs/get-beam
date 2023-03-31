@@ -9,13 +9,14 @@ app = beam.App(
     cpu=8,
     memory="32Gi",
     gpu="A10G",
-    python_version=beam.types.PythonVersion.Python38,
-    python_packages=["git+https://github.com/openai/whisper.git", "youtube_dl"],
+    python_version="python3.8",
+    python_packages=["git+https://github.com/openai/whisper.git", "pytube"],
+    commands=["apt-get update && apt-get install -y ffmpeg"],
 )
 
 # This is deployed as a REST API, but for longer videos
 # you'll want to deploy as an async Webhook instead, since the
-# REST API has a 2 min timeout
+# REST API has a 60s timeout
 app.Trigger.RestAPI(
     inputs={"video_url": beam.Types.String()},
     outputs={"pred": beam.Types.String()},
