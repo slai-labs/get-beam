@@ -3,7 +3,7 @@ import beam
 app = beam.App(
     name="sentiment-analysis",
     cpu=4,
-    memory="4Gi",
+    memory="32Gi",
     python_version="python3.9",
     python_packages=["transformers", "torch"],
 )
