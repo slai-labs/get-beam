@@ -13,14 +13,16 @@ app = beam.App(
     cpu=8,
     gpu="A10G",
     memory="32Gi",
-    python_packages=["langchain==0.0.112", "openai", "faiss-cpu", "promptlayer", "bs4"],
+    python_packages=[
+        "langchain",
+        "openai",
+        "unstructured",
+    ],
 )
 
-# Triggers determine how your app is deployed
+# The REST API trigger exposes the app as a REST endpoint when deployed
 app.Trigger.RestAPI(
-    inputs={"query": beam.Types.String()},
+    inputs={"query": beam.Types.String(), "urls": beam.Types.Json()},
     outputs={"pred": beam.Types.Json()},
     handler="run.py:start_conversation",
 )
-
-app.Output.File(name="transcript", path="transcript.txt")
