@@ -10,7 +10,10 @@ app = beam.App(
     memory="32Gi",
     gpu="A10G",
     python_version="python3.8",
-    python_packages=["git+https://github.com/openai/whisper.git", "pytube"],
+    python_packages=[
+        "git+https://github.com/openai/whisper.git",
+        "pytube @ git+https://github.com/felipeucelli/pytube@03d72641191ced9d92f31f94f38cfb18c76cfb05",
+    ],
     commands=["apt-get update && apt-get install -y ffmpeg"],
 )
 
