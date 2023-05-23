@@ -25,11 +25,6 @@ beam create-app cerebras-gpt
 beam deploy app.py
 ```
 
-### Install Beam SDK
-Finally, install the Beam SDK:
-
-```pip install beam-sdk```
-
 This example is called through a webhook. Webhooks are used for deploying
 functions that run asynchronously on Beam. Here, the webhook takes a prompt
 as one of its input fields. An example prompt and the real response from the
