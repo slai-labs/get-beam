@@ -1,38 +1,27 @@
-# RedPajama-INCITE-Instruct deployment with Beam
+# RedPajama-INCITE deployment with Beam
 
-[DLite](https://huggingface.co/togethercomputer/RedPajama-INCITE-Instruct-3B-v1) can be deployed on Beam for development
+[RedPajama-INCITE](https://huggingface.co/togethercomputer/RedPajama-INCITE-Instruct-3B-v1) can be deployed on Beam for development
 on serverless GPUs.
 
-## Getting started with Beam
+1. [Create an account on Beam](https://beam.cloud). It's free and you don't need a credit card.
 
-### Create an Account
-- [Create an account](https://www.beam.cloud/)
-- Grab your API keys from the [dashboard](https://www.beam.cloud/dashboard/settings/api-keys).
+2. Install the Beam CLI:
 
-### Install Beam CLI
-In your terminal, run:
+```bash
+curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL | sh
+```
 
-```curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL | sh```
+3. Clone this example to your computer:
 
-### Register API Keys
-Run this in your terminal - you’ll be prompted to paste in your API keys:
+```python
+beam create-app redpajama-incite-instruct
+```
 
-```beam configure```
+4. Deploy and run inference:
 
-### Install Beam SDK
-Finally, install the Beam SDK:
-
-```pip install beam-sdk```
-
-## Deploying RedPajama-INCITE-Instruct-3B-v1
-
-Create a local copy of the project by running:
-
-```beam create-app redpajama-incite-instruct```
-
-And deploy it using:
-
-```beam deploy app.py```
+```python
+beam deploy app.py
+```
 
 This example is called through a webhook. Webhooks are used for deploying
 functions that run asynchronously on Beam. Here, the webhook takes a prompt
