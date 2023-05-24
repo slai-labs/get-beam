@@ -27,5 +27,5 @@ app.Trigger.Webhook(
 # File to store outputs
 app.Output.File(path="santacoder_output.txt", name="response")
 
-# Shared volume to store cached model
+# Persistent volume to store cached model
 app.Mount.PersistentVolume(path="./santacoder", name="santacoder")

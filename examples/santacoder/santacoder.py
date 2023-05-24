@@ -13,7 +13,10 @@ def run(**inputs):
 
     # Tokenize and define model
     tokenizer = AutoTokenizer.from_pretrained(model_id)
-    model = AutoModelForCausalLM.from_pretrained(model_id, trust_remote_code=True).to(device)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        trust_remote_code=True,
+        cache_dir=cache_path).to(device)
     model = model.to('cuda:0')
     
     # Generate output
