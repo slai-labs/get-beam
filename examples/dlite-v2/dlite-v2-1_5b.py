@@ -1,5 +1,6 @@
 import torch
-from transformers import pipeline
+from instruct_pipeline import InstructionTextGenerationPipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Cached model
 cache_path = "./dlite-v2-1_5b"
@@ -10,16 +11,18 @@ model_id = "aisquared/dlite-v2-1_5b"
 def run(**inputs):
     # Takes prompt from webhook
     prompt = inputs["prompt"]
-
+ 
     # Define the model
-    pipe = pipeline(
-        model=model_id,
+    tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side="left")
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        device_map="auto",
         torch_dtype=torch.bfloat16,
-        trust_remote_code=True,
-        device_map="auto")
+        cache_dir=cache_path)
     
     # Generate output
-    generated_text = pipe(prompt)
+    generate_text = InstructionTextGenerationPipeline(model=model, tokenizer=tokenizer)
+    generated_text = generate_text(prompt)
     
     # Display and save output
     print(generated_text)

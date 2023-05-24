@@ -1,7 +1,6 @@
 # DLite deployment with Beam
 
-[DLite](https://huggingface.co/aisquared/dlite-v2-1_5b) can be deployed on Beam for development
-on serverless GPUs.
+[DLite](https://huggingface.co/aisquared/dlite-v2-1_5b) can be run on the cloud with a single command, using Beam.
 
 1. [Create an account on Beam](https://beam.cloud). It's free and you don't need a credit card.
 
