@@ -1,4 +1,4 @@
-# Santacoder deployment with Beam
+# T5 deployment with Beam
 
 [T5](https://huggingface.co/t5-large) can be run on the cloud with a single command, using Beam.
 
