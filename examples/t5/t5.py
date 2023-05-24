@@ -5,7 +5,6 @@ cache_path = "./t5"
 
 # Huggingface model
 model_id = "t5-large"
-device = "cuda"
 
 def run(**inputs):
     # Takes prompt from webhook
