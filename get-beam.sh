@@ -12,6 +12,15 @@
                 command -v "$@" >/dev/null 2>&1
         }
 
+	if [ ! -d "$install_dir" ]; then
+                echo "Install directory doesn't exist. Creating now."
+                if ! mkdir -p -- "$install_dir"; then
+                        echo "Failed to create the install directory: $install_dir"
+                        exit 1
+                fi
+                echo "Install directory created."
+        fi
+
         bin_file=
 
         case "$OS" in
