@@ -1,7 +1,7 @@
 from transformers import GPTNeoXForCausalLM, AutoTokenizer
 
 # Cached model
-cache_path = "./pythia2_8b"
+cache_path = "./pythia"
 
 # Huggingface model
 model_id = "EleutherAI/pythia-2.8b"
