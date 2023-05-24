@@ -18,7 +18,8 @@ def run(**inputs):
         model_id,
         torch_dtype=torch.float16,
         low_cpu_mem_usage=True,
-        trust_remote_code=True).to(device)
+        trust_remote_code=True,
+        cache_dir=cache_path).to(device)
 
     # Generate output
     encoding = tokenizer(

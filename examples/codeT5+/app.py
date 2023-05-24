@@ -27,5 +27,5 @@ app.Trigger.Webhook(
 # File to store outputs
 app.Output.File(path="codet5p_output.txt", name="response")
 
-# Shared volume to store cached model
+# Persistent volume to store cached model
 app.Mount.PersistentVolume(path="./codet5p", name="codet5p")

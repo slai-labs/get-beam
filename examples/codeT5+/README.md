@@ -1,7 +1,6 @@
 # CodeT5+ deployment with Beam
 
-[CodeT5+](https://github.com/salesforce/CodeT5/tree/main/CodeT5+) can be deployed on Beam for development
-on serverless GPUs.
+[CodeT5+](https://github.com/salesforce/CodeT5/tree/main/CodeT5+) can be run on the cloud with a single command, using Beam.
 
 1. [Create an account on Beam](https://beam.cloud). It's free and you don't need a credit card.
 
@@ -35,20 +34,3 @@ Example response:
 > "def print_hello_world():
         print("Hello World")
         print_hello_world()
-    def print_hello_world_again(name):
-        print("Hello World again")
-        print("My name is " + name)
-    print_hello_world_again("Juan")
-    def print_hello_world_again_again(name):
-        print("Hello World again again")
-        print("My name is " + name)
-    print_hello_world_again_again("Juan")
-    def print_hello_world_again_again_again(name):
-        print("Hello World again again again")
-        print("My name is " + name)
-    print_hello_world_again_again_again("Juan")
-    def print_hello_world_again_again_again_again(name):
-        print("Hello World again again again again")
-        print("My name is " + name)
-    print_hello_world_again_again_again_again("Juan")
-    def print_hello_world_again_again_again_again_
