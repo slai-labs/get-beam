@@ -1,7 +1,6 @@
 # Cerebras-GPT deployment with Beam
 
-[Cerebras-GPT](https://huggingface.co/cerebras/Cerebras-GPT-1.3B) can be deployed on Beam for development
-on serverless GPUs.
+[Cerebras-GPT](https://huggingface.co/cerebras/Cerebras-GPT-1.3B) can be run on the cloud with a single command, using Beam.
 
 ## Deploying Cerebras-GPT-1.3B
 
