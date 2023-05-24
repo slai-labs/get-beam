@@ -19,7 +19,10 @@ def run(**inputs):
 
     # Tokenize and define model
     tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
-    model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        torch_dtype=torch.float16,
+        cache_dir=cache_path)
     model = model.to('cuda:0')
     
     # Generate output
