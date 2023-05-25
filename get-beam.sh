@@ -13,7 +13,7 @@
         }
 
 	if [ ! -d "$install_dir" ]; then
-                echo "Install directory doesn't exist. Creating now."
+                echo "Install directory $install_dir doesn't exist. Creating now."
                 if ! mkdir -p -- "$install_dir"; then
                         echo "Failed to create the install directory: $install_dir"
                         exit 1
