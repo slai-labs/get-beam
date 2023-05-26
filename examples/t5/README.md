@@ -13,7 +13,7 @@ curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL
 3. Clone this example to your computer:
 
 ```python
-beam create-app santacoder
+beam create-app t5
 ```
 
 4. Deploy and run inference:
