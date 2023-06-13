@@ -10,4 +10,4 @@ def predict_sentiment(**inputs):
 
     print(prediction)
 
-    return prediction
+    return {"prediction": prediction}
