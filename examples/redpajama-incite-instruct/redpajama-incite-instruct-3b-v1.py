@@ -14,7 +14,7 @@ cache_path = "./redpajama-incite-instruct"
 model_id = "togethercomputer/RedPajama-INCITE-Instruct-3B-v1"
 
 def run(**inputs):
-    # Takes prompt from webhook
+    # Takes prompt from trask queue
     prompt = inputs["prompt"]
 
     # Tokenize and define model

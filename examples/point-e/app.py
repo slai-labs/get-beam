@@ -27,7 +27,7 @@ app = beam.App(
 )
 
 # Add a deployment trigger
-app.Trigger.Webhook(
+app.Trigger.TaskQueue(
     inputs={"prompt": beam.Types.String()}, handler="run.py:generate_mesh"
 )
 

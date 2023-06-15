@@ -13,8 +13,8 @@ app = beam.App(
     ],
 )
 
-# Deploy app as async webhook
-app.Trigger.Webhook(
+# Deploy app as a task queue
+app.Trigger.TaskQueue(
     inputs={"prompt": beam.Types.String()},
     handler="run.py:generate_text",
 )

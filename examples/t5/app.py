@@ -19,8 +19,8 @@ app = beam.App(
     ],
 )
 
-# Deploys function as async webhook
-app.Trigger.Webhook(
+# Deploys function as a task queue
+app.Trigger.TaskQueue(
     inputs={"prompt": beam.Types.String()},
     handler="t5.py:run",
 )

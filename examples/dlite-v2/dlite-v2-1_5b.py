@@ -9,7 +9,7 @@ cache_path = "./dlite-v2-1_5b"
 model_id = "aisquared/dlite-v2-1_5b"
 
 def run(**inputs):
-    # Takes prompt from webhook
+    # Takes prompt from task queue
     prompt = inputs["prompt"]
  
     # Define the model

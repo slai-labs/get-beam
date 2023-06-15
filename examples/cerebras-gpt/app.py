@@ -18,8 +18,8 @@ app = beam.App(
     ],
 )
 
-# Deploys function as async webhook
-app.Trigger.Webhook(
+# Deploys function as async task queue
+app.Trigger.TaskQueue(
     inputs={"prompt": beam.Types.String()},
     handler="cerebras-gpt.py:run",
 )

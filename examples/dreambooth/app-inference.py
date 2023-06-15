@@ -39,10 +39,10 @@ app = beam.App(
     python_packages="requirements.txt",
 )
 
-# Webhook API will take two inputs:
+# TaskQueue API will take two inputs:
 # - user_id, to identify the user training their custom model
 # - image_urls, a list of image URLs
-app.Trigger.Webhook(
+app.Trigger.TaskQueue(
     inputs={"user_id": beam.Types.String(), "prompt": beam.Types.String()},
     handler="run_inference.py:generate_images",
 )
