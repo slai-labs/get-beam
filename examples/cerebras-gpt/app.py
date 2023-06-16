@@ -18,7 +18,7 @@ app = beam.App(
     ],
 )
 
-# Deploys function as async task queue
+# Deploy function as a task queue
 app.Trigger.TaskQueue(
     inputs={"prompt": beam.Types.String()},
     handler="cerebras-gpt.py:run",

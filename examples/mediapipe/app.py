@@ -13,7 +13,7 @@ You could deploy this app as an API by adding a Trigger.
 
 More info on Triggers here:
 https://docs.beam.cloud/triggers/rest-api
-https://docs.beam.cloud/triggers/taskqueue
+https://docs.beam.cloud/triggers/task-queue
 
 If you have any questions, just message us in Slack :)
 """
