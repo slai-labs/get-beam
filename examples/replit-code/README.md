@@ -22,8 +22,8 @@ beam create-app replit-code
 beam deploy app.py
 ```
 
-This example is called through a webhook. Webhooks are used for deploying
-functions that run asynchronously on Beam. Here, the webhook takes a prompt
+This example is called through a task queue. Task queues are used for deploying
+functions that run asynchronously on Beam. Here, the task queue takes a prompt
 as one of its input fields. An example prompt and the real response from the
 model are given below.
 

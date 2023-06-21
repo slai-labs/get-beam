@@ -9,7 +9,7 @@ model_id = "Salesforce/codet5p-6b"
 device = "cuda"
 
 def run(**inputs):
-    # Takes prompt from webhook
+    # Takes prompt from task queue
     prompt = inputs["prompt"]
 
     # Tokenize and define model

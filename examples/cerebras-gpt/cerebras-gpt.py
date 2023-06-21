@@ -9,7 +9,7 @@ model_id = "cerebras/Cerebras-GPT-1.3B"
 device = "cuda"
 
 def run(**inputs):
-    # Takes prompt from webhook
+    # Takes prompt from task queue
     prompt = inputs["prompt"]
 
     # Tokenize and define model

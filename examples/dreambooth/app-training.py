@@ -30,8 +30,8 @@ app = beam.App(
     python_packages="requirements.txt",
 )
 
-# Deploys function as async webhook
-app.Trigger.Webhook(
+# Deploys function as async task queue
+app.Trigger.TaskQueue(
     inputs={
         "user_id": beam.Types.String(),
         "image_urls": beam.Types.Json(),

@@ -18,7 +18,7 @@ app = beam.App(
 )
 
 # This is deployed as a REST API, but for longer videos
-# you'll want to deploy as an async Webhook instead, since the
+# you'll want to deploy as an async task queue instead, since the
 # REST API has a 60s timeout
 app.Trigger.RestAPI(
     inputs={"video_url": beam.Types.String()},
