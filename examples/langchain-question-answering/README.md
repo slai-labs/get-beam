@@ -2,7 +2,7 @@
 
 This template demonstrates how to deploy LangChain apps using [Beam](https://beam.cloud).
 
-This example implements a basic version of the [Question Answering guide](https://langchain.readthedocs.io/en/latest/modules/chains/combine_docs_examples/question_answering.html). [A more complete code walk-through can be found here](https://docs.beam.cloud/getting-started/langchain).
+This example implements a basic version of the [Question Answering guide](https://langchain.readthedocs.io/en/latest/modules/chains/combine_docs_examples/question_answering.html). [A more complete code walk-through can be found here](https://docs.beam.cloud/examples/langchain).
 
 ## Deploying on Beam
 

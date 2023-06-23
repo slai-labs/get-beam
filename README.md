@@ -3,7 +3,7 @@
 </p>
 
 <h4 align="center">
-Beam is a cloud platform where you can provision infrastructure, develop on remote runtimes from your local machine, and deploy apps as serverless functions — without leaving your IDE
+Beam makes it easy to run code on GPUs, deploy scalable web APIs, schedule cron jobs, and run massively parallel workloads — without managing any infrastructure.
 </h4>
 
 <p align="center">

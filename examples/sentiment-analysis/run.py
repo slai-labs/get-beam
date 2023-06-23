@@ -2,6 +2,7 @@ from transformers import pipeline
 
 
 def predict_sentiment(**inputs):
+
     model = pipeline(
         "sentiment-analysis", model="siebert/sentiment-roberta-large-english"
     )
@@ -11,3 +12,6 @@ def predict_sentiment(**inputs):
     print(prediction)
 
     return {"prediction": prediction}
+
+import beam
+print(beam.__version__)

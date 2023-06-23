@@ -12,8 +12,8 @@ Next Steps:
 You could deploy this app as an API by adding a Trigger. 
 
 More info on Triggers here:
-https://docs.beam.cloud/triggers/rest-api
-https://docs.beam.cloud/triggers/task-queue
+https://docs.beam.cloud/deployment/rest-api
+https://docs.beam.cloud/deployment/task-queue
 
 If you have any questions, just message us in Slack :)
 """
