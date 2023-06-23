@@ -6,7 +6,7 @@ In this example, we'll setup an app with Pinecone for extractive question answer
 
 This example is based heavily on the [Extractive Question Answering example](https://docs.pinecone.io/docs/extractive-question-answering).
 
-This example requires free accounts on [Beam](https://beam.cloud), [Pinecone](https://pinecone.io), and [Huggingface](https://huggingface.co), as well as the [Beam CLI](https://docs.beam.cloud/reference/cli) and [Python SDK](https://docs.beam.cloud/reference/sdk) installed.
+This example requires free accounts on [Beam](https://beam.cloud), [Pinecone](https://pinecone.io), and [Huggingface](https://huggingface.co), as well as the [Beam CLI](https://docs.beam.cloud/getting-started/cli) and [Python SDK](https://docs.beam.cloud/getting-started/sdk) installed.
 
 ## Setup a Beam GPU Environment 
 
