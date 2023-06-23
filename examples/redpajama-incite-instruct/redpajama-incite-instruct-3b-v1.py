@@ -30,9 +30,8 @@ def run(**inputs):
     # Generate output
     input = tokenizer(prompt, return_tensors="pt").to(model.device)
     input_length = input.input_ids.shape[1]
-    inputs.pop("prompt")
     outputs = model.generate(
-        **inputs,
+        **input,
         max_new_tokens=128,
         do_sample=True,
         temperature=0.7,
