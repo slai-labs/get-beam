@@ -15,6 +15,8 @@ app = beam.App(
         "langchain",
         "openai",
         "unstructured",
+        "pdf2image",
+        "tabulate",
     ],
 )
 
