@@ -7,7 +7,7 @@ Beam makes it easy to run code on GPUs, deploy scalable web APIs, schedule cron 
 </h4>
 
 <p align="center">
-<a href="https://beam-89x5025.slack.com/join/shared_invite/zt-1jf3z8c01-ZXF6pPSCYdosaJ74__jaGw#/shared-invite/email"><img src="https://img.shields.io/badge/join-Slack-yellow"/></a>
+<a href="https://join.slack.com/t/beam-89x5025/shared_invite/zt-1ye1jzgg2-cGpMKuoXZJiT3oSzgPmN8g"><img src="https://img.shields.io/badge/join-Slack-yellow"/></a>
 <a href="https://docs.beam.cloud"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
 
 
