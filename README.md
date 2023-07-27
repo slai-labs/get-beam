@@ -3,7 +3,7 @@
 </p>
 
 <h4 align="center">
-Beam makes it easy to run code on GPUs, deploy scalable web APIs, schedule cron jobs, and run massively parallel workloads — without managing any infrastructure.
+Instantly run code on GPUs, deploy scalable web APIs, mount storage volumes, and schedule cron jobs. Beam is your swiss army knife for running code on the cloud.
 </h4>
 
 <p align="center">
@@ -11,73 +11,16 @@ Beam makes it easy to run code on GPUs, deploy scalable web APIs, schedule cron 
 <a href="https://docs.beam.cloud"><img src="https://img.shields.io/badge/docs-quickstart-blue"/></a>
 
 
-# Features
+# Get Started
 
-### 📦 Setup remote development environments in code
+The `examples` folder in this repo contains various examples of programs built with Beam. 
 
-Configure your runtime in Python - tell us how many GPUs you need and which libraries you want installed, and Beam will spawn a remote environment for you.
+You can run any of these examples yourself. All you need is a free account on [Beam](https://beam.cloud).
 
-https://user-images.githubusercontent.com/10925686/199524970-ecd3d1a6-df4f-4dc1-ad21-1cc412a15673.mp4
+# What can you do with Beam?
 
-### 🛰 Develop locally on remote hardware
-
-You can write and run your code locally - except when you enter your shell, your code will run on Beam instead of your local machine.
-
-https://user-images.githubusercontent.com/10925686/199525014-65bface8-589c-46b3-b742-8df41d10e981.mp4
-
-### 🚀 Deploy apps as serverless functions
-
-Deploy your apps as serverless REST APIs, scheduled cron jobs, or webhooks - all in just four lines of Python.
-
-https://user-images.githubusercontent.com/10925686/199525037-1c246d7b-05af-41f1-8027-89e1ffbab0ed.mp4
-
-# Installation
-
-```bash
-curl https://raw.githubusercontent.com/slai-labs/get-beam/main/get-beam.sh -sSfL | sh
-```
-
-# Getting Started
-
-1. [Create an account on Beam](https://beam.cloud) and grab your API keys from the [settings page](https://www.beam.cloud/dashboard/settings/api-keys)
-2. Configure your credentials (you'll be prompted to enter your API keys)
-
-```bash
-beam configure
-```
-
-3. Create a virtual env in the directory you want to work in
-
-```bash
-python3 -m virtualenv .venv
-```
-
-4. Source the virtual env
-
-```bash
-source .venv/bin/activate
-```
-
-5. Install Beam SDK
-
-```bash
-pip install beam-sdk
-```
-
-# Workflow
-
-**Develop**
-
-```bash
-beam start <myapp.py>
-```
-
-**Deploy**
-
-```bash
-beam deploy <myapp.py>
-```
-
-# Documentation
-
-[Check out our complete documentation here »](https://docs.beam.cloud)
+* 🛰 **Develop locally on remote hardware**. Beam provides a brand new type of cloud development experience. You can write code on your laptop and execute it on cloud hardware immediately, with lightning fast build times.
+* 📦 **Instantly containerize any Python function and run it on a GPU.** Configure your runtime in Python - tell us how many GPUs you need and which libraries you want installed, and Beam will spawn a remote environment for you.
+* 🚀 **Deploy apps as serverless functions**. Deploy your apps as serverless REST APIs, scheduled cron jobs, or task queues - all with just a single line of Python. It's great for deploying [LangChain](https://docs.beam.cloud/examples/langchain) apps, [Stable Diffusion APIs](https://docs.beam.cloud/examples/stable-diffusion-gpu), or [Dreambooth](https://docs.beam.cloud/examples/dreambooth).
+* ⏰ **Run scheduled jobs**. You can run any code on a schedule, and do things like [train machine learning models](https://docs.beam.cloud/examples/recommendation-system) and setup [data pipelines on S3 buckets](https://docs.beam.cloud/examples/s3-schedule).
+* 🗂️ **Mount storage volumes**. Read and write data to highly-performant distributed file systems.
