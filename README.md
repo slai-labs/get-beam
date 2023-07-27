@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="Logo" src="https://slai-demo-datasets.s3.amazonaws.com/git-header.png"/ width="1000">
+<img alt="Logo" src="https://slai-demo-datasets.s3.amazonaws.com/beam-banner.svg"/ width="500">
 </p>
 
 <h4 align="center">
