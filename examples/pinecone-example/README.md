@@ -11,20 +11,22 @@ This example requires free accounts on [Beam](https://beam.cloud), [Pinecone](ht
 ## Setup a Beam GPU Environment 
 
 ```python
-import beam
-
-# App configuration -- this is the compute the app will run on
-app = beam.App(
+app = App(
     name="pinecone-example",
-    cpu=8,
-    gpu="A10G",
-    memory="32Gi",
-    python_packages=[
-        "pinecone-client",
-        "sentence-transformers",
-        "torch",
-        "datasets",
-    ],
+    runtime=Runtime(
+        cpu=4,
+        gpu="T4",
+        memory="8Gi",
+        image=Image(
+            python_packages=[
+                "pinecone-client",
+                "sentence-transformers",
+                "torch",
+                "datasets",
+            ],
+        ),
+    ),
+    volumes=[Volume(path="./cached_models")],
 )
 ```
 
@@ -175,29 +177,6 @@ def answer_question(**inputs):
 ```
 
 ## Deploying on Beam
-
-To deploy this as a web endpoint, return to your `app.py` file and add a REST API Trigger.
-
-You'll define your input (a question, as a string), the outputs (an answer and the context for it), and the handler (the function that runs when the API is invoked).
-
-We'll also add a Persistent Volume to cache the Huggingface model, so we don't need to download it each time the model is invoked.
-
-```python
-# Add a REST API Trigger to deploy this app as a web endpoint
-app.Trigger.RestAPI(
-    inputs={
-        "question": beam.Types.String()
-    },  # Takes a question as input -- this is passed as a keyword argument to the handler function
-    outputs={
-        "answer": beam.Types.String(),
-        "context": beam.Types.String(),
-    },  # Returns an answer
-    handler="run.py:answer_question",  # This is the function that will be run when the endpoint is invoked
-)
-
-# This volume is used to cache the Huggingface model
-app.Mount.PersistentVolume(app_path="./cached_models", name="cached-models")
-```
 
 To deploy the app as a web endpoint, enter your shell and run:
 

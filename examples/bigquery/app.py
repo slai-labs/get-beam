@@ -1,23 +1,77 @@
-import beam
+from beam import App, Runtime, Image, Output
 
+import os
+from google.cloud import bigquery
+from google.oauth2 import service_account
 
-app = beam.App(
+# To start, you'll need your own GCP credentials stored in the Beam Secrets Manager
+# beam.cloud/apps/settings/secrets
+
+app = App(
     name="big-query-example",
-    cpu=4,
-    memory="16Gi",
-    python_version="python3.8",
-    python_packages=["google-cloud-bigquery", "google-auth", "pandas", "db-dtypes"],
+    runtime=Runtime(
+        cpu=4,
+        memory="8Gi",
+        image=Image(
+            python_version="python3.8",
+            python_packages=[
+                "google-cloud-bigquery",
+                "google-auth",
+                "pandas",
+                "db-dtypes",
+            ],
+        ),
+    ),
 )
 
-# You can run this app on a schedule, every hour
-app.Trigger.Schedule(
-    when="every 1h",
-    # The handler is the function that'll be run when the task is invoked
-    handler="run.py:read_from_bq",
-)
 
-# We're mounting a file path so we can store our query results somewhere
-app.Output.File(path="query_result.csv", name="query_result")
-# You can download these files by running this command in your shell: `download <path>`
-# The file will be saved to a __downloads__ folder in the same directory where the app is running
-# If your app is deployed, you can download these outputs from your Beam dashboard: beam.cloud/apps
+class BigQueryClient:
+    def __init__(self):
+        # Load credentials from the secrets manager
+        self.credentials = service_account.Credentials.from_service_account_file(
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+        )
+
+        # Load the project ID
+        self.client = bigquery.Client(
+            project=os.environ["BQ_PROJECT_ID"],
+        )
+
+    def run_query(self, query, output_path):
+        # Pull from BQ and convert to dataframe
+        dataframe = self.client.query(query).result().to_dataframe()
+        # Save DF as CSV and write it to the Output Dir defined in app.py
+        dataframe.to_csv(
+            output_path,
+            mode="w+",
+        )
+
+
+# @app.schedule(when="every 1h", outputs=[Output(path="query_result.csv")])
+@app.run(outputs=[Output(path="query_result.csv")])
+def read_from_bq(*, query):
+    bq_client = BigQueryClient()
+    # We'll download the query results to the Output directory mounted in app.py
+    # You can download files in your shell by running: `download query_result.csv`
+    # The file will be saved to a __downloads__ folder in the same directory where the app is running
+    output_path = "query_result.csv"
+    bq_client.run_query(query=query, output_path=output_path)
+
+
+if __name__ == "__main__":
+    query = """
+    SELECT
+    refresh_date AS Day,
+    term AS Top_Term,
+        -- These search terms are in the top 25 in the US each day.
+    rank,
+    FROM `bigquery-public-data.google_trends.top_terms`
+    WHERE
+    rank = 1
+        -- Choose only the top term each day.
+    AND refresh_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 WEEK)
+        -- Filter to the last 2 weeks.
+    GROUP BY Day, Top_Term, rank
+    ORDER BY Day DESC
+    """
+    read_from_bq(query=query)

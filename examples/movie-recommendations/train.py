@@ -1,6 +1,11 @@
 """
 Trains a neural collaborative filtering recommender model on the MovieLens dataset
+
+Start a training job:
+
+beam run train.py:run_training_pipeline
 """
+from beam import App, Runtime, Image, Volume
 
 import random
 
@@ -13,6 +18,19 @@ from torch.utils.data import DataLoader
 from dataset import MovieLensDataset
 
 device = "cpu"
+
+training_app = App(
+    name="movie-recommendation-training",
+    runtime=Runtime(
+        cpu=4,
+        memory="16Gi",
+        image=Image(
+            python_version="python3.8",
+            python_packages=["numpy", "torch", "pandas", "matplotlib"],
+        ),
+    ),
+    volumes=[Volume(name="trained_models", path="./trained_models")],
+)
 
 
 class NCF(nn.Module):
@@ -198,7 +216,8 @@ def train():
     return model
 
 
-if __name__ == "__main__":
+@training_app.run()
+def run_training_pipeline():
     # Trains a model and saves the state_dict to the persistent volume
     trained_model = train()
     persistent_volume_path = "/volumes/trained_models/model.pt"

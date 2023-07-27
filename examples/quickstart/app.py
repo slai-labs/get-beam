@@ -1,17 +1,17 @@
-import beam
+"""
+Run this on Beam:
 
-app = beam.App(
-    name="hello-world",
-    cpu=1,
-    memory="4Gi",
-    python_version="python3.8",
-    python_packages=[],
-)
+beam run app.py:multiply_numbers
+"""
 
-app.Trigger.RestAPI(
-    inputs={"text": beam.Types.String()},
-    outputs={
-        "response": beam.Types.String(),
-    },
-    handler="run.py:hello_world",
-)
+from beam import App, Runtime
+
+app = App(name="hello-beam", runtime=Runtime())
+
+
+@app.run()
+def multiply_numbers():
+    print("This is running remotely on Beam!")
+    x = 43
+    y = 177
+    print(f"🔮 {x} * {y} is { x * y}")
