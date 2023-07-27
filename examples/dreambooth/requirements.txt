@@ -10,5 +10,6 @@ datasets
 xformers
 bitsandbytes-cuda117
 deepspeed
-git+https://github.com/huggingface/diffusers.git@v0.12.1
-git+https://github.com/huggingface/accelerate.git@v0.16.0
+git+https://github.com/huggingface/diffusers.git
+git+https://github.com/huggingface/accelerate.git
+

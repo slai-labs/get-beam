@@ -1,15 +1,28 @@
-import beam
+from beam import App, Runtime, Image
+from transformers import pipeline
 
-app = beam.App(
+app = App(
     name="sentiment-analysis",
-    cpu=4,
-    memory="32Gi",
-    python_version="python3.9",
-    python_packages=["transformers", "torch"],
+    runtime=Runtime(
+        cpu=4,
+        memory="32Gi",
+        image=Image(
+            python_version="python3.9",
+            python_packages=["transformers", "torch"],
+        ),
+    ),
 )
 
-app.Trigger.RestAPI(
-    inputs={"text": beam.Types.String()},
-    outputs={"prediction": beam.Types.String()},
-    handler="run.py:predict_sentiment",
-)
+
+@app.rest_api()
+def predict_sentiment(**inputs):
+    model = pipeline(
+        "sentiment-analysis", model="siebert/sentiment-roberta-large-english"
+    )
+
+    result = model(inputs["text"], truncation=True, top_k=1)
+    prediction = {i["label"]: i["score"] for i in result}
+
+    print(prediction)
+
+    return {"prediction": prediction}

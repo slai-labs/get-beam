@@ -1,4 +1,3 @@
-
 This example demonstrates an AI Avatar app, built using [DreamBooth](https://dreambooth.github.io/) and [Stable Diffusion v1.5](https://huggingface.co/runwayml/stable-diffusion-v1-5).
 
 ## Overview
@@ -10,41 +9,31 @@ This app has two APIs. The first API is used to start a fine-tuning job on a bat
 This endpoint will take a list of input images as URLs, and fine-tune Stable Diffusion on those images. It also takes a user ID, so that you can reference the specific fine-tuned model later on when you generate customized images.
 
 ```python app-training.py
-import beam
+from beam import App, Runtime, Image, Output, Volume
 
 # The environment your code will run on
-app = beam.App(
-    name="dreambooth-inference",
-    cpu=8,
-    memory="32Gi",
-    gpu="A10G",
-    python_version="python3.8",
-    python_packages="requirements.txt",
+app = App(
+    name="dreambooth-training",
+    runtime=Runtime(
+        gpu="A10G",
+        cpu=8,
+        memory="32Gi",
+        image=Image(
+            python_version="python3.8",
+            python_packages="requirements.txt",
+        ),
+    ),
+    # Shared Volume to store the trained models
+    volumes=[Volume(path="./dreambooth", name="dreambooth")]
 )
 
-# TaskQueue API will take the following inputs:
-# - user_id, to identify the user training their custom model
-# - image_urls, a list of image URLs
-# - class prompt, which is the **general** category of the thing being trained on (e.g. a person)
-# - instance prompt, which is the **specific** thing being trained (e.g. a sks person)
-app.Trigger.TaskQueue(
-    inputs={
-        "user_id": beam.Types.String(),
-        "image_urls": beam.Types.Json(),
-        "class_prompt": beam.Types.String(),
-        "instance_prompt": beam.Types.String(),
-    },
-    handler="run_training.py:train_dreambooth",
-)
-
-# File path where we'll save the generated images
-app.Output.File(path="output.png", name="image-output")
-
-# Shared volume to store trained models
-app.Mount.SharedVolume(path="./dreambooth", name="dreambooth")
+# Deploys function as async task queue
+@app.task_queue()
+def train_dreambooth(**inputs):
+  return
 ```
 
-You can run this code locally by running `beam start app-training.py`, or deploy it as a web endpoint by running `beam deploy app-training.py`.
+You can run this code locally by running `beam run app-training.py:train_dreambooth`, or deploy it as a web endpoint by running `beam deploy app-training.py`.
 
 ## Starting a fine-tuning job through the web API
 
@@ -111,31 +100,19 @@ This returns the task status. If the task is completed, we can call the inferenc
 First, we'll deploy the code to run inference with the fine-tuned model:
 
 ```python app-inference.py
-import beam
-
-# The environment your code will run on
-app = beam.App(
+app = App(
     name="dreambooth-inference",
-    cpu=8,
-    memory="32Gi",
-    gpu="A10G",
-    python_version="python3.8",
-    python_packages="requirements.txt",
+    runtime=Runtime(
+        cpu=8,
+        memory="32Gi",
+        gpu="A10G",
+        image=Image(
+            python_version="python3.8",
+            python_packages="requirements.txt",
+        ),
+    ),
+    volumes=[Volume(path="./dreambooth", name="dreambooth")],
 )
-
-# TaskQueue API will take two inputs:
-# - user_id, to identify the user training their custom model
-# - image_urls, a list of image URLs
-app.Trigger.TaskQueue(
-    inputs={"user_id": beam.Types.String(), "prompt": beam.Types.String()},
-    handler="run_inference.py:generate_images",
-)
-
-# File path where we'll save the generated images
-app.Output.File(path="output.png", name="image-output")
-
-# Shared Volume to store the trained models
-app.Mount.SharedVolume(path="./dreambooth", name="dreambooth")
 ```
 
 You can deploy this by running `beam deploy app-inference.py`. Once it's deployed, you can find the web URL in the dashboard.

@@ -1,31 +1,56 @@
-import beam
+from beam import App, Runtime, Image, Output, Volume
+
+import torch
+from instruct_pipeline import InstructionTextGenerationPipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Cached model
+cache_path = "./dlite-v2-1_5b"
+
+# Huggingface model
+model_id = "aisquared/dlite-v2-1_5b"
+
 
 # The environment your code will run on
-app = beam.App(
+app = App(
     name="dlite-v2-1_5b",
-    cpu=16,
-    memory="32Gi",
-    gpu="A10G",
-    python_version="python3.8",
-    python_packages=[
-        "diffusers[torch]>=0.10",
-        "transformers",
-        "torch",
-        "pillow",
-        "accelerate",
-        "safetensors",
-        "xformers",
-    ],
+    runtime=Runtime(
+        cpu=16,
+        memory="32Gi",
+        gpu="A10G",
+        image=Image(
+            python_version="python3.8",
+            python_packages=[
+                "diffusers[torch]>=0.10",
+                "transformers",
+                "torch",
+                "pillow",
+                "accelerate",
+                "safetensors",
+                "xformers",
+            ],
+        ),
+    ),
+    volumes=[Volume(path="./dlite-v2-1_5b", name="dlite-v2-1_5b")],
 )
 
-# Deploys function as a task queue
-app.Trigger.TaskQueue(
-    inputs={"prompt": beam.Types.String()},
-    handler="dlite-v2-1_5b.py:run",
-)
 
-# File to store outputs
-app.Output.File(path="dlite_output.txt", name="response")
+@app.task_queue(outputs=[Output(path="dlite_output.txt")])
+def run(**inputs):
+    # Takes prompt from task queue
+    prompt = inputs["prompt"]
 
-# Persistent volume to store cached model
-app.Mount.PersistentVolume(path="./dlite-v2-1_5b", name="dlite-v2-1_5b")
+    # Define the model
+    tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side="left")
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id, device_map="auto", torch_dtype=torch.bfloat16, cache_dir=cache_path
+    )
+
+    # Generate output
+    generate_text = InstructionTextGenerationPipeline(model=model, tokenizer=tokenizer)
+    generated_text = generate_text(prompt)
+
+    # Display and save output
+    print(generated_text)
+    with open("dlite_output.txt", "w") as file:
+        file.write(generated_text)
