@@ -6,15 +6,12 @@ This example demonstrates a basic movie recommendation system. The following cap
 3. Retrieving the trained model from a Persistent Volume during inference
 4. Deploying a REST API that accepts a user ID and returns customized recommendations for that user
 
-**Run this as a one-off job**
-
-If you have an inference_app.run() decorator, you can run this command to run one inference example:
+**Run inference**
 
 beam run app.py:run_inference -d '{"user_id": 42, "number_of_recommendations": 10}'
 
 **Deploy this as a REST API**
 
-If you change that decorator from run() --> rest_api(), you can run this command to deploy the function as a REST API
 beam deploy app.py:run_inference 
 """
 
