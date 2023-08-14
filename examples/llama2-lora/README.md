@@ -108,7 +108,7 @@ beam run app.py:train_model
 
 When we run this command, the training function will run on Beam's cloud, and we'll see the progress of the training process streamed to our terminal:
 
-![](/img/training-logs.png)
+![](./img/training-logs.png)
 
 # Deploying Inference API
 
@@ -150,11 +150,11 @@ We can deploy this as a REST API by running this command:
 beam deploy app.py:run_inference
 ```
 
-![](/img/deployment-logs.png)
+![](./img/deployment-logs.png)
 
 If we navigate to the URL printed in the shell, we'll be able to copy the full cURL request to call the REST API.
 
-![](/img/beam-api.png)
+![](./img/beam-api.png)
 
 I modified the request slightly with a payload for the model:
 
