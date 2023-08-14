@@ -63,14 +63,14 @@ def run_inference(**inputs):
     # Grab the latest checkpoint
     checkpoint = get_newest_checkpoint()
     
-    # Initialize models
+    # Initialize models with latest fine-tuned checkpoint
     models = load_models(checkpoint=checkpoint)
 
     model = models["model"]
     tokenizer = models["tokenizer"]
     prompter = models["prompter"]
 
-    # Generate text
+    # Generate text response
     response = call_model(
         input=input, model=model, tokenizer=tokenizer, prompter=prompter
     )

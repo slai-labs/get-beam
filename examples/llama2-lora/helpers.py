@@ -13,11 +13,23 @@ def get_trained_model(checkpoint):
 
 
 def get_newest_checkpoint():
-    try:
-        checkpoint_path = Path(beam_volume_path)
-        checkpoint_files = checkpoint_path.glob("*.json")
-        newest_checkpoint = max(checkpoint_files, key=os.path.getctime, default=None)
-    except Exception as e:
-        print(f"Error: {e}")
+    # Find all checkpoint dirs
+    checkpoint_dirs = [
+        d
+        for d in os.listdir(beam_volume_path)
+        if os.path.isdir(os.path.join(beam_volume_path, d)) and "checkpoint" in d
+    ]
 
-    return Path(newest_checkpoint).as_posix()
+    if not checkpoint_dirs:
+        print("No checkpoints exist yet, make sure you've trained a model.")
+        return
+
+    # Get the latest checkpoint
+    most_recent_dir = max(
+        checkpoint_dirs,
+        key=lambda d: os.path.getctime(os.path.join(beam_volume_path, d)),
+    )
+
+    newest_checkpoint_path = os.path.join(beam_volume_path, most_recent_dir)
+
+    return Path(newest_checkpoint_path).as_posix()

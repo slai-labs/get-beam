@@ -10,21 +10,32 @@ If you'd like to run this example immediately, start by cloning this repo.
 
 #### Train
 
-Start a fine-tuning job: 
+Start a fine-tuning job:
 
 ```sh
 beam run app.py:train_model
 ```
 
+#### Inference
+
+> You must train the model before you can run inference. 
+
+Run a single inference:
+
+```sh
+ beam run app.py:run_inference \
+ -d '{"input": "what are the five steps to become a published author?"}'
+```
+
 #### Deploy
 
-Deploy a REST API for inference: 
+Deploy a REST API to run inference externally:
 
 ```sh
 beam deploy app.py:run_inference
 ```
 
-## Tutorial 
+## Tutorial
 
 ### Training
 
@@ -33,6 +44,8 @@ We're going to implement the code in the [Llama 2 LoRA repo](https://github.com/
 I'm using the [Instruction Tuning with GPT-4](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM) dataset, which is hosted on Huggingface.
 
 The first thing we'll do is setup the compute environment to run Llama 2. The training script is run on a 24Gi A10G GPU:
+
+> This example only demonstrates the high-level workflow, so specific functions like `train` are hidden. You can find the entire source code in this repo.  
 
 ```python
 from math import ceil
@@ -152,9 +165,9 @@ I modified the request slightly with a payload for the model:
 And here's the response from the fine-tuned model:
 
 ```sh
-    1. Create your manuscript with consistent writing sessions.
-    2. Revise and polish your work for clarity and accuracy.
-    3. Study your target audience and market trends.
-    4. Choose between traditional or self-publishing based on your goals.
-    5. Pursue traditional publishing with a compelling proposal.
+1. Write a book
+2. Get an agent
+3. Get a publisher
+4. Get a book deal
+5. Get a book published
 ```

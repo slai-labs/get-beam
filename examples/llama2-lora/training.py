@@ -17,6 +17,7 @@ from peft import (
     set_peft_model_state_dict,
 )
 from transformers import LlamaForCausalLM, LlamaTokenizer
+from helpers import base_model
 
 from utils.prompter import Prompter
 
@@ -43,15 +44,8 @@ else:
 def load_models(checkpoint):
     clear_cache()
 
-    base_model = "openlm-research/open_llama_7b"
-
-    # Retrieve the latest fine-tuned model from volume
-
     load_8bit: bool = True
-
-    # Enter the name of your prompt template here
     prompt_template = "alpaca"
-
     prompter = Prompter(prompt_template)
     tokenizer = LlamaTokenizer.from_pretrained(
         base_model,
