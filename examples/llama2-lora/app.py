@@ -1,22 +1,14 @@
-import os
-import json
-import sys
+from math import ceil
 
 from beam import App, Runtime, Image, Volume
-from finetune import train
+from helpers import get_newest_checkpoint, base_model
+from training import train, load_models
+from datasets import load_dataset
+from inference import call_model
 
-import fire
-import gradio as gr
-import torch
-import transformers
-from peft import PeftModel
-from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
-
-from utils.callbacks import Iteratorize, Stream
-from utils.prompter import Prompter
-
-BASE_MODEL = "decapoda-research/llama-7b-hf"
-
+# ---------------------------------------------------------------------------- #
+#                            Beam App Definition                               #
+# ---------------------------------------------------------------------------- #
 app = App(
     "llama-lora",
     runtime=Runtime(
@@ -28,123 +20,58 @@ app = App(
             python_packages="requirements.txt",
         ),
     ),
+    # Mount Volumes for fine-tuned models and cached model weights
     volumes=[
-        Volume(name="lora-alpaca", path="./lora-alpaca"),
+        Volume(name="checkpoints", path="./checkpoints"),
         Volume(name="pretrained-models", path="./pretrained-models"),
     ],
 )
 
-if torch.cuda.is_available():
-    device = "cuda"
-else:
-    device = "cpu"
 
-
-def loader():
-    load_8bit: bool = True
-    base_model: str = BASE_MODEL
-    lora_weights: str = "./lora-alpaca"
-    prompt_template: str = ""  # The prompt template to use, will default to alpaca.
-    base_model = base_model or os.environ.get("BASE_MODEL", "")
-
-    prompter = Prompter(prompt_template)
-    tokenizer = LlamaTokenizer.from_pretrained(base_model)
-
-    if device == "cuda":
-        model = LlamaForCausalLM.from_pretrained(
-            base_model,
-            load_in_8bit=load_8bit,
-            torch_dtype=torch.float16,
-            device_map="auto",
-            cache_dir=f"./pretrained-models/{base_model}",
-        )
-        model = PeftModel.from_pretrained(
-            model,
-            lora_weights,
-            torch_dtype=torch.float16,
-        )
-    else:
-        model = LlamaForCausalLM.from_pretrained(
-            base_model,
-            device_map={"": device},
-            low_cpu_mem_usage=True,
-            cache_dir=f"./pretrained-models/{base_model}",
-        )
-        model = PeftModel.from_pretrained(
-            model,
-            lora_weights,
-            device_map={"": device},
-        )
-
-    # unwind broken decapoda-research config
-    model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
-    model.config.bos_token_id = 1
-    model.config.eos_token_id = 2
-
-    if not load_8bit:
-        model.half()  # seems to fix bugs for some users.
-
-    model.eval()
-    if torch.__version__ >= "2" and sys.platform != "win32":
-        model = torch.compile(model)
-
-    return {
-        "prompter": prompter,
-        "tokenizer": tokenizer,
-        "model": model,
-    }
-
-
-@app.schedule(when="every 24h")
+# ---------------------------------------------------------------------------- #
+#                                Training API                                  #
+# ---------------------------------------------------------------------------- #
+@app.run()
 def train_model():
-    train(base_model=BASE_MODEL)
+    # Trained models will be saved to this path
+    beam_volume_path = "./checkpoints"
 
+    # Load dataset -- for this example, we'll use the vicgalle/alpaca-gpt4 dataset hosted on Huggingface:
+    # https://huggingface.co/datasets/vicgalle/alpaca-gpt4
+    dataset = load_dataset("vicgalle/alpaca-gpt4")
+    
+    # Adjust the training loop based on the size of the dataset
+    samples = len(dataset["train"])
+    val_set_size = ceil(0.1 * samples)
 
-@app.rest_api(loader=loader)
-def evaluate(
-    instruction,
-    context={},
-    input=None,
-    temperature=0.1,
-    top_p=0.75,
-    top_k=40,
-    num_beams=4,
-    max_new_tokens=128,
-    **kwargs,
-):
-    prompter: Prompter = context.get("prompter")
-    tokenizer: LlamaTokenizer = context.get("tokenizer")
-    model: PeftModel = context.get("model")
-
-    prompt = prompter.generate_prompt(instruction, input)
-    inputs = tokenizer(prompt, return_tensors="pt")
-    input_ids = inputs["input_ids"].to(device)
-    generation_config = GenerationConfig(
-        temperature=temperature,
-        top_p=top_p,
-        top_k=top_k,
-        num_beams=num_beams,
-        **kwargs,
+    train(
+        base_model=base_model,
+        val_set_size=val_set_size,
+        data=dataset,
+        output_dir=beam_volume_path,
     )
 
-    # Without streaming
-    with torch.no_grad():
-        generation_output = model.generate(
-            input_ids=input_ids,
-            generation_config=generation_config,
-            return_dict_in_generate=True,
-            output_scores=True,
-            max_new_tokens=max_new_tokens,
-        )
-    print(generation_output)
-    s = generation_output.sequences[0]
-    output = tokenizer.decode(s)
-    print(json.dumps(output))
-    print({"verify": "stuff works"})
-    prompt_response = prompter.get_response(output)
-    print(prompt_response)
-    return prompt_response
 
+# ---------------------------------------------------------------------------- #
+#                                Inference API                                 #
+# ---------------------------------------------------------------------------- #
+@app.rest_api()
+def run_inference(**inputs):
+    # Inputs passed to the API
+    input = inputs["input"]
 
-if __name__ == "__main__":
-    train_model()
+    # Grab the latest checkpoint
+    checkpoint = get_newest_checkpoint()
+    
+    # Initialize models
+    models = load_models(checkpoint=checkpoint)
+
+    model = models["model"]
+    tokenizer = models["tokenizer"]
+    prompter = models["prompter"]
+
+    # Generate text
+    response = call_model(
+        input=input, model=model, tokenizer=tokenizer, prompter=prompter
+    )
+    return response
