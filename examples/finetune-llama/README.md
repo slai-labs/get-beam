@@ -39,11 +39,11 @@ beam deploy app.py:run_inference
 
 ### Training
 
-We're going to implement the code in the [Llama LoRA repo](https://github.com/tloen/alpaca-lora) in a script we can run on Beam.
+We're going to implement the code in the [Llama 2 LoRA repo](https://github.com/tloen/alpaca-lora) in a script we can run on Beam.
 
 I'm using the [Instruction Tuning with GPT-4](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM) dataset, which is hosted on Huggingface.
 
-The first thing we'll do is setup the compute environment to run Llama. The training script is run on a 24Gi A10G GPU:
+The first thing we'll do is setup the compute environment to run Llama 2. The training script is run on a 24Gi A10G GPU:
 
 > This example only demonstrates the high-level workflow, so specific functions like `train` are hidden. You can find the entire source code in this repo.  
 
