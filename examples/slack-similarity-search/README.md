@@ -37,7 +37,13 @@ You'll need to add the following secrets to the Beam Secret Manager:
 
 ## Setup Metal
 
-First, we'll create an index on Metal. Give it a name. You can use the defaults for the other options.
+First, we'll create an index on Metal. 
+
+Metal has two index types: **flat** and **Hierarchical Navigable Small World (HNSW)**.
+
+Flat uses a simple one-dimensional data structure, and uses nearest neighbors search to find record similarity. In contrast, HNSW works by constructing a hierarchy of different dimensions, which is more efficient and less computationally intensive, at the expense of accuracy. 
+
+For this example, we'll be using the Flat dataset. Our dataset is only 100 records, so the performance penalty of the Flat index shouldn't be an issue.
 
 ![](./img/metal-index.png)
 
@@ -244,4 +250,8 @@ You can also click on the *Logs* tab to view all the container logs:
 
 ![](./img/logs.png)
 
+## Conclusion
 
+There's more work for us to do in operationalizing this code, but it's a powerful starting point. Metal makes it really easy to store embeddings and search among them. By running this on Beam, we're able to expose this logic as a serverless REST API using a minimal amount of code and configuration.
+
+Feel free to fork this example and extend it as you wish. We look forward to seeing what you build!
