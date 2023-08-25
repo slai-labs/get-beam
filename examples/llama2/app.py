@@ -39,6 +39,10 @@ app = App(
         image=Image(
             python_packages=[
                 "accelerate",
+                "bitsandbytes",
+                "scipy",
+                "protobuf",
+                "accelerate",
                 "transformers",
                 "torch",
                 "sentencepiece",
@@ -61,14 +65,20 @@ def generate(**inputs):
 
     tokenizer = LlamaTokenizer.from_pretrained(
         base_model,
+        load_in_8bit=True,
+        torch_dtype=torch.float16,
         cache_dir="./model_weights",
+        legacy=True,
+        device_map={"": 0},
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     )
+
     model = LlamaForCausalLM.from_pretrained(
         base_model,
         torch_dtype=torch.float16,
-        device_map="auto",
+        load_in_8bit=True,
         cache_dir="./model_weights",
+        device_map={"": 0},
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     )
 
@@ -77,11 +87,11 @@ def generate(**inputs):
     input_ids = inputs["input_ids"].to("cuda")
 
     generation_config = GenerationConfig(
-        temperature=0.1,
+        do_sample=True,
+        temperature=0.3,
         top_p=0.75,
         top_k=40,
-        num_beams=4,
-        max_length=512,
+        num_beams=1,
     )
 
     with torch.no_grad():
@@ -90,8 +100,7 @@ def generate(**inputs):
             generation_config=generation_config,
             return_dict_in_generate=True,
             output_scores=True,
-            max_new_tokens=128,
-            early_stopping=True,
+            max_new_tokens=600,
         )
 
     s = generation_output.sequences[0]
@@ -103,3 +112,4 @@ def generate(**inputs):
     output_path = "output.txt"
     with open(output_path, "w") as f:
         f.write(decoded_output)
+
