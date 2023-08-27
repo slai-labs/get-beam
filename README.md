@@ -3,7 +3,7 @@
 </p>
 
 <h4 align="center">
-Instantly run code on GPUs, deploy scalable web APIs, mount storage volumes, and schedule cron jobs. Beam is your swiss army knife for running code on the cloud.
+Train and deploy AI and LLM applications securely on serverless GPUs, without managing infrastructure.
 </h4>
 
 <p align="center">
