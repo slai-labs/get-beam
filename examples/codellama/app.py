@@ -28,8 +28,8 @@ app = App(
     name="codellama",
     runtime=Runtime(
         cpu=8,
-        memory="32Gi",
-        gpu="A10G",
+        memory="16Gi",
+        gpu="T4",
         image=Image(
             python_packages=[
                 "accelerate",
