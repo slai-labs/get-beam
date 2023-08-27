@@ -8,6 +8,14 @@ You'll also need to add your `HUGGINGFACE_API_KEY` to the [Beam Secret Manager](
 
 ![](./img/secret-list.png)
 
+## Clone Inference Script
+
+Once you've [installed the Beam CLI](https://docs.beam.cloud/getting-started/installation), download the inference script to your computer. You can clone this repo, or just run this command:
+
+```sh
+beam create-app codellama
+```
+
 ## Run Inference
 
 You can run this inference script on a remote GPU with this command:
