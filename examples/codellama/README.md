@@ -1,8 +1,10 @@
 # Serverless API for CodeLlama 
 
+This example shows you how you can run CodeLlama on a serverless cloud GPU. It cold starts in ~10s.
+
 ## Pre-requisities 
 
-First, create an account on [Beam](https://beam.cloud). It's free and you'll get 10 hours of GPU credit to start. Follow the steps in the onboarding to install the CLI and save your client credentials.
+First, create an account on [Beam](https://beam.cloud). It's free and you'll get 10 hours of GPU credit to start. Follow the steps in the onboarding to install the CLI and save the client credentials to your compute.
 
 You'll also need to add your `HUGGINGFACE_API_KEY` to the [Beam Secret Manager](https://www.beam.cloud/dashboard/settings/secrets) to run this example.
 
