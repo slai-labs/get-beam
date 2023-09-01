@@ -25,12 +25,13 @@ from langchain.llms import OpenAI
 app = App(
     name="conversational-ai",
     runtime=Runtime(
-        cpu=4,
+        cpu=2,
         gpu="T4",
-        memory="16Gi",
+        memory="8Gi",
         image=Image(
             python_packages=[
                 "langchain",
+                "unstructured[csv]",
                 "openai",
                 "unstructured",
                 "pdf2image",
