@@ -1,4 +1,4 @@
-'''
+"""
 ### Open LLaMA ###
 
 ** Run inference **
@@ -12,8 +12,8 @@ beam run app.py:generate_text -d '{"prompt": "Simply put, the theory of relativi
 ```sh
 beam deploy app.py:generate_text
 ```
-'''
-from beam import App, Runtime, Image, Output, Volume
+"""
+from beam import App, Runtime, Image, Volume
 
 import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer, GenerationConfig
@@ -23,13 +23,14 @@ base_model = "openlm-research/open_llama_7b"
 app = App(
     name="openllama",
     runtime=Runtime(
-        cpu=16,
-        memory="32Gi",
+        cpu=1,
+        memory="8Gi",
         gpu="A10G",
         image=Image(
             python_packages=[
                 "accelerate",
                 "transformers",
+                "protobuf",
                 "torch",
                 "sentencepiece",
             ],
@@ -39,12 +40,14 @@ app = App(
 )
 
 
-@app.task_queue(outputs=[Output(path="output.txt")])
+@app.rest_api()
 def generate_text(**inputs):
     prompt = inputs["prompt"]
 
     tokenizer = LlamaTokenizer.from_pretrained(
-        base_model, cache_dir="./llama_weights"
+        base_model,
+        cache_dir="./llama_weights",
+        legacy=False,
     )
     model = LlamaForCausalLM.from_pretrained(
         base_model,
@@ -78,10 +81,7 @@ def generate_text(**inputs):
 
     print(decoded_output)
 
-    # Write text output to a text file, which we'll retrieve when the async task completes
-    output_path = "output.txt"
-    with open(output_path, "w") as f:
-        f.write(decoded_output)
+    return {"output": decoded_output}
 
 
 if __name__ == "__main__":
