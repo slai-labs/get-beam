@@ -8,8 +8,8 @@ app = App(
     name="high-performance-inference",
     runtime=Runtime(
         cpu=1,
-        memory="20Gi",
-        gpu="A10G",
+        memory="8Gi",
+        gpu="T4",
         image=Image(
             python_version="python3.9",
             python_packages=[
@@ -28,8 +28,8 @@ autoscaler = RequestLatencyAutoscaler(desired_latency=30, max_replicas=3)
 
 # This function runs once when the container boots
 def load_models():
-    model = OPTForCausalLM.from_pretrained("facebook/opt-350m", cache_dir=CACHE_PATH)
-    tokenizer = AutoTokenizer.from_pretrained("facebook/opt-350m", cache_dir=CACHE_PATH)
+    model = OPTForCausalLM.from_pretrained("facebook/opt-125m", cache_dir=CACHE_PATH)
+    tokenizer = AutoTokenizer.from_pretrained("facebook/opt-125m", cache_dir=CACHE_PATH)
 
     return model, tokenizer
 
