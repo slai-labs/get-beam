@@ -10,7 +10,7 @@ This example takes an audio file as input and returns a .zip file with separated
 # Quickstart
 
 1. Test the API: `beam serve app.py`. You can make any desired changes to the code, and Beam will automatically reload the remote server each time you update your application code. 
-> Note: Any updates to compute requirements, python packages, or shell commands will require you to manually restart the dev session)
+> Note: Any updates to compute requirements, python packages, or shell commands will require you to manually restart the dev session
 2. Deploy the API: `beam deploy app.py`
 
 # Calling the API
@@ -37,9 +37,9 @@ You can monitor the status of the request through the web dashboard or `/task` A
 
 ```sh
 curl -X GET \
-  --header "Content-Type: application/json" \
-  --user "{CLIENT_ID}:{CLIENT_SECRET}" \
-  "https://api.beam.cloud/v1/task/{TASK_ID}/status/"
+-H 'Authorization: Basic [YOUR AUTH TOKEN]' \
+-H 'Content-Type: application/json' \
+"https://api.beam.cloud/v1/task/{TASK_ID}/status/"
 ```
 
 Once the task is finished, this call will return a pre-signed to download audio files that were generated.
