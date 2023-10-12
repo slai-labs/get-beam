@@ -1,4 +1,4 @@
-from beam import App, Runtime, Image, Volume, QueueDepthAutoscaler, RequestLatencyAutoscaler
+from beam import App, Runtime, Image, Volume, RequestLatencyAutoscaler
 from transformers import AutoTokenizer, OPTForCausalLM
 
 # Beam Volume to store cached models
@@ -9,7 +9,7 @@ app = App(
     runtime=Runtime(
         cpu=1,
         memory="8Gi",
-        gpu="A10G",
+        gpu="T4",
         image=Image(
             python_version="python3.9",
             python_packages=[
@@ -22,7 +22,7 @@ app = App(
     volumes=[Volume(name="cached_models", path=CACHE_PATH)],
 )
 
-# Autoscale by the number of tasks in the queue
+# Autoscale by request latency
 autoscaler = RequestLatencyAutoscaler(desired_latency=1, max_replicas=5)
 
 
