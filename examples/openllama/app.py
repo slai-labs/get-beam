@@ -40,10 +40,7 @@ app = App(
 )
 
 
-@app.rest_api()
-def generate_text(**inputs):
-    prompt = inputs["prompt"]
-
+def load_models():
     tokenizer = LlamaTokenizer.from_pretrained(
         base_model,
         cache_dir="./llama_weights",
@@ -55,6 +52,21 @@ def generate_text(**inputs):
         device_map="auto",
         cache_dir="./llama_weights",
     )
+
+    return model, tokenizer
+
+
+@app.rest_api(loader=load_models)
+def generate_text(**inputs):
+    # Grab inputs passed to the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "The meaning of life is"
+
+    # Retrieve pre-loaded model
+    model, tokenizer = inputs["context"]
 
     tokenizer.bos_token_id = 1
     inputs = tokenizer(prompt, return_tensors="pt")

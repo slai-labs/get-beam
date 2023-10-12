@@ -22,7 +22,7 @@ model_id = "runwayml/stable-diffusion-v1-5"
 app = App(
     name="stable-diffusion-app",
     runtime=Runtime(
-        cpu=8,
+        cpu=1,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -42,15 +42,7 @@ app = App(
 )
 
 
-@app.task_queue(
-    # File to store image outputs
-    outputs=[Output(path="output.png")],
-)
-def generate_image(**inputs):
-    prompt = inputs["prompt"]
-
-    torch.backends.cuda.matmul.allow_tf32 = True
-
+def load_models():
     pipe = StableDiffusionPipeline.from_pretrained(
         model_id,
         revision="fp16",
@@ -59,6 +51,27 @@ def generate_image(**inputs):
         # Add your own auth token from Huggingface
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     ).to("cuda")
+
+    return pipe
+
+
+@app.task_queue(
+    # File to store image outputs
+    loader=load_models,
+    outputs=[Output(path="output.png")],
+)
+def generate_image(**inputs):
+    # Grab inputs passed to the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "a renaissance style photo of elon musk"
+    
+    # Retrieve model fron loader
+    pipe = inputs["context"]
+
+    torch.backends.cuda.matmul.allow_tf32 = True
 
     with torch.inference_mode():
         with torch.autocast("cuda"):

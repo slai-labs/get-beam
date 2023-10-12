@@ -6,9 +6,8 @@ from training import train, load_models
 from datasets import load_dataset
 from inference import call_model
 
-# ---------------------------------------------------------------------------- #
-#                            Beam App Definition                               #
-# ---------------------------------------------------------------------------- #
+
+# The environment your code runs on 
 app = App(
     "llama-lora",
     runtime=Runtime(
@@ -28,9 +27,7 @@ app = App(
 )
 
 
-# ---------------------------------------------------------------------------- #
-#                                Training API                                  #
-# ---------------------------------------------------------------------------- #
+# Fine-tuning
 @app.run()
 def train_model():
     # Trained models will be saved to this path

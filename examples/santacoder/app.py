@@ -14,7 +14,7 @@ device = "cuda"
 app = App(
     name="santacoder",
     runtime=Runtime(
-        cpu=8,
+        cpu=1,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -34,16 +34,26 @@ app = App(
 )
 
 
-@app.task_queue(outputs=[Output(path="santacoder_output.txt")])
-def run(**inputs):
-    # Takes prompt from webhook
-    prompt = inputs["prompt"]
-
-    # Tokenize and define model
+def load_models():
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id, trust_remote_code=True, cache_dir=cache_path
     ).to(device)
+
+    return model, tokenizer
+
+
+@app.task_queue(outputs=[Output(path="santacoder_output.txt")], loader=load_models)
+def run(**inputs):
+    # Grab inputs passed to the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "The meaning of life is"
+
+    # Retrieve model from loader
+    model, tokenizer = inputs["context"]
     model = model.to("cuda:0")
 
     # Generate output

@@ -59,10 +59,7 @@ app = App(
 )
 
 
-@app.task_queue(outputs=[Output(path="output.txt")])
-def generate(**inputs):
-    prompt = inputs["prompt"]
-
+def load_models():
     tokenizer = LlamaTokenizer.from_pretrained(
         base_model,
         load_in_8bit=True,
@@ -81,6 +78,20 @@ def generate(**inputs):
         device_map={"": 0},
         use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     )
+
+    return model, tokenizer
+
+
+@app.task_queue(outputs=[Output(path="output.txt")], loader=load_models)
+def generate(**inputs):
+    # Grab inputs passed to the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "The meaning of life is"
+
+    model, tokenizer = inputs["context"]
 
     tokenizer.bos_token_id = 1
     inputs = tokenizer(prompt, return_tensors="pt")
@@ -112,4 +123,3 @@ def generate(**inputs):
     output_path = "output.txt"
     with open(output_path, "w") as f:
         f.write(decoded_output)
-
