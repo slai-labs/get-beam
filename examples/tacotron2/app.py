@@ -1,4 +1,4 @@
-from beam import App, Runtime, Image, Output, Volume
+from beam import App, Runtime, Image, Volume
 
 
 from io import BytesIO
@@ -12,29 +12,14 @@ torch.backends.cudnn.enabled = True
 torch.backends.cudnn.benchmark = False
 
 device = "cuda"
-dst_dir = "/volumes/vol/"
-torch.hub.set_dir(dst_dir)
-
-tacotron2 = torch.hub.load(
-    "NVIDIA/DeepLearningExamples:torchhub", "nvidia_tacotron2", model_math="fp16"
-)
-tacotron2 = tacotron2.to("cuda")
-tacotron2.eval()
-
-waveglow = torch.hub.load(
-    "NVIDIA/DeepLearningExamples:torchhub", "nvidia_waveglow", model_math="fp16"
-)
-waveglow = waveglow.remove_weightnorm(waveglow)
-waveglow = waveglow.to("cuda")
-waveglow.eval()
-
-utils = torch.hub.load("NVIDIA/DeepLearningExamples:torchhub", "nvidia_tts_utils")
+volume_path = "./models"
+torch.hub.set_dir(volume_path)
 
 
 app = App(
     name="tacotron2",
     runtime=Runtime(
-        cpu=8,
+        cpu=1,
         memory="16Gi",
         gpu="T4",
         image=Image(
@@ -54,12 +39,31 @@ app = App(
             ],
         ),
     ),
-    volumes=[Volume(name="vol", path="/vol")],
+    volumes=[Volume(name="models", path=volume_path)],
 )
 
 
-@app.rest_api()
-def to_speech(text: str) -> str:
+def load_models():
+    tacotron2 = torch.hub.load(
+        "NVIDIA/DeepLearningExamples:torchhub", "nvidia_tacotron2", model_math="fp16"
+    )
+    tacotron2 = tacotron2.to("cuda")
+    tacotron2.eval()
+
+    waveglow = torch.hub.load(
+        "NVIDIA/DeepLearningExamples:torchhub", "nvidia_waveglow", model_math="fp16"
+    )
+    waveglow = waveglow.remove_weightnorm(waveglow)
+    waveglow = waveglow.to("cuda")
+    waveglow.eval()
+
+    utils = torch.hub.load("NVIDIA/DeepLearningExamples:torchhub", "nvidia_tts_utils")
+
+    return utils, tacotron2, waveglow
+
+
+@app.rest_api(loader=load_models)
+def to_speech(**inputs):
     """Convert text to audio using tacotron2.
     Args:
         text (str): text to turn to speech.
@@ -68,7 +72,9 @@ def to_speech(text: str) -> str:
         audio text
     """
 
-    sequences, lengths = utils.prepare_input_sequence([text])
+    utils, tacotron2, waveglow = inputs["context"]
+
+    sequences, lengths = utils.prepare_input_sequence([inputs["text"]])
     with torch.no_grad():
         mel, _, _ = tacotron2.infer(sequences, lengths)
         audio = waveglow.infer(mel)
