@@ -25,7 +25,7 @@ from langchain.llms import OpenAI
 app = App(
     name="conversational-ai",
     runtime=Runtime(
-        cpu=2,
+        cpu=1,
         gpu="T4",
         memory="8Gi",
         image=Image(
@@ -46,8 +46,13 @@ app = App(
 @app.rest_api()
 def start_conversation(**inputs):
     # Grab inputs passed to the API
-    urls = inputs["urls"]
-    query = inputs["query"]
+    try:
+        urls = inputs["urls"]
+        query = inputs["query"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        urls = ["https://www.nutribullet.com"]
+        query = "What are some use cases I can use this product for?"
 
     loader = UnstructuredURLLoader(urls=urls)
     data = loader.load()

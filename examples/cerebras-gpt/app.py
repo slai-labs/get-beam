@@ -15,7 +15,7 @@ device = "cuda"
 app = App(
     name="cerebras-gpt",
     runtime=Runtime(
-        cpu=16,
+        cpu=4,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -35,16 +35,26 @@ app = App(
 )
 
 
-@app.task_queue(outputs=[Output(path="cerebrasgpt_output.txt")])
-def run(**inputs):
-    # Takes prompt from task queue
-    prompt = inputs["prompt"]
-
+def load_models():
     # Tokenize and define model
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(model_id, cache_dir=cache_path).to(
         device
     )
+    return model, tokenizer
+
+
+@app.task_queue(outputs=[Output(path="cerebrasgpt_output.txt")], loader=load_models)
+def run(**inputs):
+    # Grab the video URL passed from the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default input if none is provided
+    except KeyError:
+        prompt = "The meaning of life is"
+
+    # Retrieve model from loader
+    model, tokenizer = inputs["context"]
 
     # Generate output
     input = tokenizer.encode(prompt, return_tensors="pt").to(device)

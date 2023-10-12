@@ -11,7 +11,7 @@ from pytube import YouTube
 app = App(
     name="whisper-example",
     runtime=Runtime(
-        cpu=8,
+        cpu=1,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -26,13 +26,23 @@ app = App(
 )
 
 
+def load_models():
+    model = whisper.load_model("small")
+    return model
+
+
 # This is deployed as a REST API, but for longer videos
 # you'll want to deploy as an async task queue instead, since the
 # REST API has a 60s timeout
-@app.rest_api(outputs=[Output(path="video.mp3")])
+@app.rest_api(outputs=[Output(path="video.mp3")], loader=load_models)
 def transcribe(**inputs):
     # Grab the video URL passed from the API
-    video_url = inputs["video_url"]
+    try:
+        video_url = inputs["video_url"]
+    # Use a default input if none is provided
+    except KeyError:
+        video_url = "https://www.youtube.com/watch?v=adJFT6_j9Uk&ab_channel=minutephysics"
+    
 
     # Create YouTube object
     yt = YouTube(video_url)
@@ -45,8 +55,9 @@ def transcribe(**inputs):
     os.rename(out_file, new_file)
     a = new_file
 
-    # Load Whisper and transcribe audio
-    model = whisper.load_model("small")
+    # Retrieve model from loader
+    model = inputs["context"]
+    # Inference
     result = model.transcribe(a)
 
     print(result["text"])

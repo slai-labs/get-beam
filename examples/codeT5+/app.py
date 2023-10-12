@@ -15,7 +15,7 @@ device = "cuda"
 app = App(
     name="codet5p",
     runtime=Runtime(
-        cpu=16,
+        cpu=4,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -35,11 +35,7 @@ app = App(
 )
 
 
-@app.task_queue(outputs=[Output(path="codet5p_output.txt")])
-def run(**inputs):
-    # Takes prompt from task queue
-    prompt = inputs["prompt"]
-
+def load_models():
     # Tokenize and define model
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -49,6 +45,15 @@ def run(**inputs):
         trust_remote_code=True,
         cache_dir=cache_path,
     ).to(device)
+    return model, tokenizer
+
+
+@app.task_queue(outputs=[Output(path="codet5p_output.txt")], loader=load_models)
+def run(**inputs):
+    # Takes prompt from task queue
+    prompt = inputs["prompt"]
+    # Retrieve model from loader
+    model, tokenizer = inputs["context"]
 
     # Generate output
     encoding = tokenizer(prompt, return_tensors="pt").to(device)

@@ -23,7 +23,7 @@ app = App(
 )
 
 # Autoscale by request latency
-autoscaler = RequestLatencyAutoscaler(desired_latency=30, max_replicas=3)
+autoscaler = RequestLatencyAutoscaler(desired_latency=1, max_replicas=5)
 
 
 # This function runs once when the container boots
