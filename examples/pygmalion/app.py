@@ -1,3 +1,5 @@
+# Run this by running: beam serve app.py:predict
+
 from beam import App, Runtime, Image, Volume, RequestLatencyAutoscaler
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
@@ -26,8 +28,8 @@ app = App(
     volumes=[Volume(name="cached_models", path=CACHE_PATH)],
 )
 
-# Autoscale by request latency
-autoscaler = RequestLatencyAutoscaler(desired_latency=1, max_replicas=5)
+# Autoscale by request latency - will spin up add'l replicas if latency exceeds 30s
+autoscaler = RequestLatencyAutoscaler(desired_latency=30, max_replicas=5)
 
 
 # This function runs once when the container boots
@@ -54,7 +56,7 @@ def predict(**inputs):
     inputs = tokenizer(prompt, return_tensors="pt")
 
     # Generate
-    generate_ids = model.generate(inputs.input_ids.to('cuda'), max_length=30)
+    generate_ids = model.generate(inputs.input_ids.to("cuda"), max_length=30)
     result = tokenizer.batch_decode(
         generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False
     )[0]
