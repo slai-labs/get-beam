@@ -49,9 +49,7 @@ def train_model():
     )
 
 
-# ---------------------------------------------------------------------------- #
-#                                Inference API                                 #
-# ---------------------------------------------------------------------------- #
+# Inference
 @app.rest_api()
 def run_inference(**inputs):
     # Inputs passed to the API
