@@ -1,13 +1,7 @@
 """
 ### Open LLaMA ###
 
-** Run inference **
-
-```sh
-beam run app.py:generate_text -d '{"prompt": "Simply put, the theory of relativity states that "}'
-```
-
-** Deploy API **
+** Deploy the API **
 
 ```sh
 beam deploy app.py:generate_text

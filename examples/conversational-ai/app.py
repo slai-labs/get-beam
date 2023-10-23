@@ -73,10 +73,3 @@ def start_conversation(**inputs):
     res = chain({"input_documents": docs, "question": query}, return_only_outputs=True)
     print(res)
     return {"pred": res}
-
-
-if __name__ == "__main__":
-    # You can customize this query however you want:
-    urls = ["https://www.nutribullet.com"]
-    query = "What are some use cases I can use this product for?"
-    start_conversation(urls=urls, query=query)
