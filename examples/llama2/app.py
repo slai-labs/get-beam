@@ -6,13 +6,7 @@
 1. Request access to the model on [Huggingface](https://huggingface.co/meta-llama/Llama-2-7b-hf)
 2. Add your Huggingface API token to the Beam Secrets Manager, as `HUGGINGFACE_API_KEY`
 
-** Run inference **
-
-```sh
-beam run app.py:generate -d '{"prompt": "Summarize rail travel in the United States"}'
-```
-
-** Deploy API **
+** Deploy the API **
 
 ```sh
 beam deploy app.py:generate

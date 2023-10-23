@@ -93,7 +93,3 @@ def run_inference(**inputs):
     # Returns top N unseen recommendations
     return {"recommendations": recs}
 
-
-if __name__ == "__main__":
-    prediction = run_inference(user_id=42, number_of_recommendations=10)
-    print(prediction)
