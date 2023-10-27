@@ -27,7 +27,7 @@ base_model = "meta-llama/Llama-2-7b-hf"
 app = App(
     name="llama2",
     runtime=Runtime(
-        cpu=8,
+        cpu=4,
         memory="32Gi",
         gpu="A10G",
         image=Image(
@@ -61,7 +61,6 @@ def load_models():
         cache_dir="./model_weights",
         legacy=True,
         device_map={"": 0},
-        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     )
 
     model = LlamaForCausalLM.from_pretrained(
@@ -70,7 +69,6 @@ def load_models():
         load_in_8bit=True,
         cache_dir="./model_weights",
         device_map={"": 0},
-        use_auth_token=os.environ["HUGGINGFACE_API_KEY"],
     )
 
     return model, tokenizer
