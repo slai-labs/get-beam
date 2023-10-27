@@ -28,13 +28,13 @@ base_model = "codellama/CodeLlama-7b-hf"
 # Beam Volume Path to cache model weights
 cache_path = "model_weights"
 
-# This is the compute environment your code will run on 
+# This is the compute environment your code will run on
 app = App(
     name="codellama",
     runtime=Runtime(
-        cpu=1,
-        memory="8Gi",
-        gpu="T4", 
+        cpu=4,
+        memory="16Gi",
+        gpu="T4",
         image=Image(
             python_packages=[
                 "accelerate",
@@ -62,8 +62,30 @@ app = App(
 )
 
 
+# Pre-load the models for inference
+def load_models():
+    tokenizer = CodeLlamaTokenizer.from_pretrained(
+        base_model,
+        load_in_8bit=True,
+        torch_dtype=torch.float16,
+        cache_dir=cache_path,
+        legacy=True,
+        device_map={"": 0},
+    )
+
+    model = LlamaForCausalLM.from_pretrained(
+        base_model,
+        torch_dtype=torch.float16,
+        load_in_8bit=True,
+        cache_dir=cache_path,
+        device_map={"": 0},
+    )
+
+    return tokenizer, model
+
+
 # This decorator allows us to deploy the API on Beam
-@app.rest_api()
+@app.rest_api(loader=load_models)
 def generate(**inputs):
     # Grab the prompt from the API
     try:
@@ -76,27 +98,8 @@ def generate(**inputs):
             return result
         '''
 
-    # Make sure your token is saved in the Beam Secrets Manager
-    hf_token = os.environ["HUGGINGFACE_API_KEY"]
-
-    tokenizer = CodeLlamaTokenizer.from_pretrained(
-        base_model,
-        load_in_8bit=True,
-        torch_dtype=torch.float16,
-        cache_dir=cache_path,
-        legacy=True,
-        device_map={"": 0},
-        use_auth_token=hf_token,
-    )
-
-    model = LlamaForCausalLM.from_pretrained(
-        base_model,
-        torch_dtype=torch.float16,
-        load_in_8bit=True,
-        cache_dir=cache_path,
-        device_map={"": 0},
-        use_auth_token=hf_token,
-    )
+    # Retrieve cached model and tokenizer from loader
+    tokenizer, model = inputs["context"]
 
     # Inference
     with torch.no_grad():
