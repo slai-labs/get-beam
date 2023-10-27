@@ -18,14 +18,6 @@ Once you've [installed the Beam CLI](https://docs.beam.cloud/getting-started/ins
 beam create-app codellama
 ```
 
-## Run Inference
-
-You can run this inference script on a remote GPU with this command:
-
-```sh
-beam run app.py:generate
-```
-
 ## Deploy
 
 When we're ready to deploy, we'll enter the shell and use the `beam deploy` command:
