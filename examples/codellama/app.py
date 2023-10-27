@@ -5,11 +5,6 @@
 
 Add your Huggingface API token to the Beam Secrets Manager, as `HUGGINGFACE_API_KEY`
 
-** Run inference **
-
-```sh
-beam run app.py:generate 
-```
 ** Deploy API **
 
 ```sh
