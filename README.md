@@ -3,7 +3,7 @@
 </p>
 
 <h4 align="center">
-Train and deploy AI and LLM applications securely on serverless GPUs, without managing infrastructure.
+Hosting for any Python project, big or small. Run AI / ML inference, FastAPI apps, or cron jobs. Beam is the easiest way to run Python on the cloud.
 </h4>
 
 <p align="center">
