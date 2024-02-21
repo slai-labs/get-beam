@@ -1,17 +1,19 @@
 from beam import App, Runtime, Image, Volume, RequestLatencyAutoscaler
-from transformers import AutoTokenizer, OPTForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Beam Volume to store cached models
 CACHE_PATH = "./cached_models"
 
+device = "cuda"
+
 app = App(
-    name="high-performance-inference",
+    name="inference-quickstart",
     runtime=Runtime(
         cpu=1,
         memory="8Gi",
-        gpu="T4",
+        gpu="A10G",
         image=Image(
-            python_version="python3.9",
+            python_version="python3.8",
             python_packages=[
                 "transformers",
                 "torch",
@@ -23,13 +25,17 @@ app = App(
 )
 
 # Autoscale by request latency
-autoscaler = RequestLatencyAutoscaler(desired_latency=1, max_replicas=5)
+autoscaler = RequestLatencyAutoscaler(desired_latency=30, max_replicas=3)
 
 
 # This function runs once when the container boots
 def load_models():
-    model = OPTForCausalLM.from_pretrained("facebook/opt-125m", cache_dir=CACHE_PATH)
-    tokenizer = AutoTokenizer.from_pretrained("facebook/opt-125m", cache_dir=CACHE_PATH)
+    model = AutoModelForCausalLM.from_pretrained(
+        "roneneldan/TinyStories-1M", cache_dir=CACHE_PATH
+    ).to(device)
+    tokenizer = AutoTokenizer.from_pretrained(
+        "EleutherAI/gpt-neo-125M", cache_dir=CACHE_PATH
+    )
 
     return model, tokenizer
 
@@ -39,16 +45,20 @@ def load_models():
 def predict(**inputs):
     # Retrieve cached model from loader
     model, tokenizer = inputs["context"]
-
-    prompt = inputs["prompt"]
-    inputs = tokenizer(prompt, return_tensors="pt")
+    # Grab the prompt from the API
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "Once upon a time there was"
 
     # Generate
-    generate_ids = model.generate(inputs.input_ids, max_length=30)
-    result = tokenizer.batch_decode(
-        generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False
-    )[0]
+    inputs = tokenizer.encode(prompt, return_tensors="pt").to(device)
+    output = model.generate(
+        inputs, max_length=1000, num_beams=1, pad_token_id=tokenizer.eos_token_id
+    )
+    output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
-    print(result)
+    print(output_text)
 
-    return {"prediction": result}
+    return {"prediction": output_text}
