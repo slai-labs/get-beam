@@ -18,8 +18,8 @@ model_id = "runwayml/stable-diffusion-v1-5"
 app = App(
     name="stable-diffusion-app",
     runtime=Runtime(
-        cpu=1,
-        memory="32Gi",
+        cpu=2,
+        memory="16Gi",
         gpu="A10G",
         image=Image(
             python_version="python3.8",
@@ -52,6 +52,7 @@ def load_models():
 @app.task_queue(
     loader=load_models,
     outputs=[Output(path="output.png")],
+    keep_warm_seconds=60,
 )
 def generate_image(**inputs):
     # Grab inputs passed to the API
