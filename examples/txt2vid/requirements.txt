@@ -1,0 +1,9 @@
+diffusers[torch]>=0.10
+transformers
+torch
+pillow
+accelerate
+safetensors
+xformers
+omegaconf
+opencv-python
