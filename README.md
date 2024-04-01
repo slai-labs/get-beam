@@ -3,7 +3,7 @@
 </p>
 
 <h4 align="center">
-Hosting for any Python project, big or small. Run AI / ML inference, FastAPI apps, or cron jobs. Beam is the easiest way to run Python on the cloud.
+Run GPU inference and training jobs on serverless infrastructure that scales with you
 </h4>
 
 <p align="center">
