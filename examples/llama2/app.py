@@ -12,9 +12,9 @@
 beam deploy app.py:generate
 ```
 """
+
 from beam import App, Runtime, Image, Output, Volume, VolumeType
 
-import os
 import torch
 from transformers import (
     GenerationConfig,

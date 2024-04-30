@@ -5,6 +5,7 @@
 
 beam deploy app.py:generate_image
 """
+
 from beam import App, Runtime, Image, Output, Volume
 
 import os
@@ -37,11 +38,12 @@ app = App(
     volumes=[Volume(name="models", path="./models")],
 )
 
+
 # This runs once when the container first boots
 def load_models():
     pipe = StableDiffusionPipeline.from_pretrained(
         model_id,
-        revision="fp16",
+        variant="fp16",
         torch_dtype=torch.float16,
         cache_dir=cache_path,
     ).to("cuda")
@@ -61,7 +63,7 @@ def generate_image(**inputs):
     # Use a default prompt if none is provided
     except KeyError:
         prompt = "a renaissance style photo of elon musk"
-    
+
     # Retrieve pre-loaded model from loader
     pipe = inputs["context"]
 
