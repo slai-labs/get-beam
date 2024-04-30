@@ -1,4 +1,4 @@
-from beam import App, Runtime, Image, Volume, RequestLatencyAutoscaler
+from beam import App, Runtime, Image, Volume, QueueDepthAutoscaler
 from transformers import AutoTokenizer, OPTForCausalLM
 
 # Beam Volume to store cached models
@@ -9,7 +9,7 @@ app = App(
     runtime=Runtime(
         cpu=1,
         memory="8Gi",
-        gpu="T4",
+        gpu="A10G",
         image=Image(
             python_version="python3.9",
             python_packages=[
@@ -22,8 +22,8 @@ app = App(
     volumes=[Volume(name="cached_models", path=CACHE_PATH)],
 )
 
-# Autoscale by request latency
-autoscaler = RequestLatencyAutoscaler(desired_latency=1, max_replicas=5)
+# Autoscale by queue depth, up to 5 replicas
+autoscaler = QueueDepthAutoscaler(max_tasks_per_replica=5, max_replicas=5)
 
 
 # This function runs once when the container boots
@@ -40,7 +40,12 @@ def predict(**inputs):
     # Retrieve cached model from loader
     model, tokenizer = inputs["context"]
 
-    prompt = inputs["prompt"]
+    try:
+        prompt = inputs["prompt"]
+    # Use a default prompt if none is provided
+    except KeyError:
+        prompt = "Q: What is the largest animal?\nA:"
+
     inputs = tokenizer(prompt, return_tensors="pt")
 
     # Generate
