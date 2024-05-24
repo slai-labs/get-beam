@@ -22,14 +22,10 @@ app = App(
         gpu="T4",
         image=Image(
             python_version="python3.10",
-            python_packages=[
-                "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git",
-                "xformers<0.0.26",
-                "trl",
-                "peft",
-                "accelerate",
-                "bitsandbytes",
+            commands=[
+                "apt-get update && pip install unsloth[colab-new]@git+https://github.com/unslothai/unsloth.git && pip install --no-deps xformers trl peft accelerate bitsandbytes"
             ],
+            python_packages=["torch"],
         ),
     ),
 )
