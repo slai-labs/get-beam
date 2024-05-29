@@ -15,6 +15,16 @@ This app has an APIs to generate an image based on the prompt.
 
 # Quickstart
 
+0. Go to your Beam dashboard and upload the model weights on a Volume you create as described [here](https://docs.beam.cloud/data/volumes#uploading-files-with-the-dashboard).
+Then make sure you add the path to each model weight in the constants section:
+```
+model_path = f"{volume_path}/Anything-V3.0-pruned-fp32.safetensors"
+lora_path = f"{volume_path}/"
+lora_name = "Crayon.safetensors"
+ti_path = f"{volume_path}/1vanakn0ll.pt"
+vae_path = f"{volume_path}/vae-ft-mse-840000-ema-pruned.safetensors"
+```
+
 1. Test the API Locally: `beam serve app.py`. You can make any desired changes to the code, and Beam will automatically 
   reload the remote server each time you update your application code. 
   Note: Any updates to compute requirements, python packages, or shell commands will require you to manually restart the dev session
